@@ -19,7 +19,7 @@ void main(void)
     //Send Start Bit
     startBit();
 
-    sendByte(0xA0);
+    sendByte(EEPROM_WRITE);
     asm(" nop");
 
     sendByte(0x11);
@@ -30,11 +30,15 @@ void main(void)
 
     sendByte(0x11);
     asm(" nop");
-//
-//    sendByte(0x03);
-//    asm(" nop");
 
-//    sendByte(0x10);
+    sendByte(0x03);
+    asm(" nop");
+
+    startBit();
+
+    sendByte(EEPROM_READ);
+    asm(" nop");
+
     char a = receiveByte();
     asm(" nop");
 
