@@ -16,16 +16,12 @@ void main(void)
     pinInit();
     asm(" nop");
 
+/****************** EEPROM WRITE ***************/
     //Send Start Bit
     startBit();
 
+    //Write to EEPROM
     sendByte(EEPROM_WRITE);
-    asm(" nop");
-
-    sendByte(0x11);
-    asm(" nop");
-
-    sendByte(0x11);
     asm(" nop");
 
     sendByte(0x11);
@@ -34,8 +30,19 @@ void main(void)
     sendByte(0x03);
     asm(" nop");
 
+/****************** EEPROM READ ***************/
+    //Send Start to read
     startBit();
 
+    //Write address to read  from EEPROM
+    sendByte(EEPROM_WRITE);
+    asm(" nop");
+
+    sendByte(0x11);
+    asm(" nop");
+
+    startBit();
+    //Read data from EEPROM
     sendByte(EEPROM_READ);
     asm(" nop");
 

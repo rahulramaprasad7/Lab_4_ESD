@@ -9,7 +9,7 @@
 
 void stopBit()
 {
-    //Make sure SCL is high before sending start bit
+    //Make sure SCL is high before sending stop bit
     P6->OUT |= BIT6;
     //Make sure SDA is low
     P6->OUT &= ~BIT7;
@@ -18,6 +18,7 @@ void stopBit()
     P6->OUT |= BIT7;
     asm(" nop");
     P6->OUT &= ~(BIT6);
+    asm(" nop");
 }
 
 

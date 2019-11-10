@@ -9,6 +9,7 @@
 void sendByte(char x)
 {
     int i;
+    P6->OUT &= ~BIT7;
     for (i = 0; i < 8; i++)
     {
         //Send MSB of data
@@ -33,6 +34,8 @@ void sendByte(char x)
     P6->OUT |= (BIT6);
     asm(" nop");
     P6->OUT &= ~(BIT6);
+    asm(" nop");
+    P6->OUT |= BIT7;
 }
 
 

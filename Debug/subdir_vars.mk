@@ -11,7 +11,6 @@ CMD_SRCS += \
 C_SRCS += \
 ../main.c \
 ../pinInit.c \
-../pin_init.c \
 ../receiveByte.c \
 ../sendByte.c \
 ../startBit.c \
@@ -22,7 +21,6 @@ C_SRCS += \
 C_DEPS += \
 ./main.d \
 ./pinInit.d \
-./pin_init.d \
 ./receiveByte.d \
 ./sendByte.d \
 ./startBit.d \
@@ -33,7 +31,6 @@ C_DEPS += \
 OBJS += \
 ./main.obj \
 ./pinInit.obj \
-./pin_init.obj \
 ./receiveByte.obj \
 ./sendByte.obj \
 ./startBit.obj \
@@ -44,7 +41,6 @@ OBJS += \
 OBJS__QUOTED += \
 "main.obj" \
 "pinInit.obj" \
-"pin_init.obj" \
 "receiveByte.obj" \
 "sendByte.obj" \
 "startBit.obj" \
@@ -55,7 +51,6 @@ OBJS__QUOTED += \
 C_DEPS__QUOTED += \
 "main.d" \
 "pinInit.d" \
-"pin_init.d" \
 "receiveByte.d" \
 "sendByte.d" \
 "startBit.d" \
@@ -66,7 +61,6 @@ C_DEPS__QUOTED += \
 C_SRCS__QUOTED += \
 "../main.c" \
 "../pinInit.c" \
-"../pin_init.c" \
 "../receiveByte.c" \
 "../sendByte.c" \
 "../startBit.c" \
