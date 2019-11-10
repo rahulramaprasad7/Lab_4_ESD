@@ -19,4 +19,6 @@ void stopBit();
 
 void sendByte(char );
 
+char receiveByte();
+
 #endif /* MYINCLUDES_H_ */

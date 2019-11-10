@@ -10,19 +10,37 @@
 
 void main(void)
 {
-	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
+    WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
 
-	//Initialise SDA and SCL pins
+    //Initialise SDA and SCL pins
     pinInit();
     asm(" nop");
 
     //Send Start Bit
     startBit();
+
+    sendByte(0xA0);
     asm(" nop");
 
-    sendByte('N');
+    sendByte(0x11);
     asm(" nop");
-    //Send stop bit
+
+    sendByte(0x11);
+    asm(" nop");
+
+    sendByte(0x11);
+    asm(" nop");
+//
+//    sendByte(0x03);
+//    asm(" nop");
+
+//    sendByte(0x10);
+    char a = receiveByte();
+    asm(" nop");
+
+    //stopBit();
     stopBit();
+
+    while(1);
 
 }

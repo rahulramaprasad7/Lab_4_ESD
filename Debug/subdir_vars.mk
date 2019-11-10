@@ -12,6 +12,7 @@ C_SRCS += \
 ../main.c \
 ../pinInit.c \
 ../pin_init.c \
+../receiveByte.c \
 ../sendByte.c \
 ../startBit.c \
 ../startup_msp432p401r_ccs.c \
@@ -22,6 +23,7 @@ C_DEPS += \
 ./main.d \
 ./pinInit.d \
 ./pin_init.d \
+./receiveByte.d \
 ./sendByte.d \
 ./startBit.d \
 ./startup_msp432p401r_ccs.d \
@@ -32,6 +34,7 @@ OBJS += \
 ./main.obj \
 ./pinInit.obj \
 ./pin_init.obj \
+./receiveByte.obj \
 ./sendByte.obj \
 ./startBit.obj \
 ./startup_msp432p401r_ccs.obj \
@@ -42,6 +45,7 @@ OBJS__QUOTED += \
 "main.obj" \
 "pinInit.obj" \
 "pin_init.obj" \
+"receiveByte.obj" \
 "sendByte.obj" \
 "startBit.obj" \
 "startup_msp432p401r_ccs.obj" \
@@ -52,6 +56,7 @@ C_DEPS__QUOTED += \
 "main.d" \
 "pinInit.d" \
 "pin_init.d" \
+"receiveByte.d" \
 "sendByte.d" \
 "startBit.d" \
 "startup_msp432p401r_ccs.d" \
@@ -62,6 +67,7 @@ C_SRCS__QUOTED += \
 "../main.c" \
 "../pinInit.c" \
 "../pin_init.c" \
+"../receiveByte.c" \
 "../sendByte.c" \
 "../startBit.c" \
 "../startup_msp432p401r_ccs.c" \
