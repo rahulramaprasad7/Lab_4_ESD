@@ -9,6 +9,7 @@
 #include "myIncludes.h"
 
 char messages[5][80] = {"Enter w to write a byte ", "Enter r to read a byte ", "Enter h to hex dump ", "Enter x for reset ","Enter b to go back to main menu "};
+char wrongInput[80] = "Please enter a valid character";
 char newLine [2] = {'\n','\r'};
 int i;
 
@@ -16,10 +17,17 @@ void main(void)
 {
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
 
+    //Initialise SDA and SCL pins
+    pinInit();
+    asm(" nop");
+
+    //Initialise UART registers
     uartInit();
 
-    __enable_irq();   //Enable global interrupts
+    //Enable global interrupts
+    __enable_irq();
 
+    //Add UART interrupt to NVIC
     NVIC->ISER[0] |= (1 << (EUSCIA0_IRQn & 31));
 
     for ( i = 0; i < 4; i++)
@@ -28,47 +36,34 @@ void main(void)
         putstr(newLine);
     }
 
-    //Initialise SDA and SCL pins
-    pinInit();
-    asm(" nop");
+    while(1)
+    {
+//        for ( i = 0; i < 4; i++)
+//        {
+//            putstr(&messages[i][80]);
+//            putstr(newLine);
+//        }
+        if ( x == 'w')
+        {
+            startBit();
+            write();
+            stopBit();
+            x = NULL; //Reset the character used to echo
+        }
 
-/****************** EEPROM WRITE ***************/
-    //Send Start Bit
-    startBit();
-
-    //Write to EEPROM
-    sendByte(EEPROM_WRITE);
-    asm(" nop");
-
-    sendByte(0x00);
-    asm(" nop");
-
-    sendByte(0x03);
-    asm(" nop");
-
-/****************** EEPROM READ ***************/
-    //Send Start to read
-    startBit();
-
-    //Write address to read  from EEPROM
-    sendByte(EEPROM_WRITE);
-    asm(" nop");
-
-    sendByte(0x00);
-    asm(" nop");
-
-    startBit();
-    //Read data from EEPROM
-    sendByte(EEPROM_READ);
-    asm(" nop");
-
-    char a = receiveByte();
-    asm(" nop");
-
-    //stopBit();
-    stopBit();
-
-    while(1);
+        else if (x == 'r')
+        {
+            startBit();
+            read();
+            stopBit();
+            x = NULL; //Reset the character used to echo
+        }
+//        else
+//        {
+//            putstr(wrongInput);
+//            x = NULL; //Reset the character used to echo
+//        }
+    }
 }
 
 void EUSCIA0_IRQHandler(void)

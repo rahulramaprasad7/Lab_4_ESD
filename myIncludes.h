@@ -32,6 +32,10 @@ void sendByte(char );
 
 char receiveByte();
 
+void write();
+
+char read();
+
 void uartInit();
 
 void putstr(char *buff);
