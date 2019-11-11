@@ -8,11 +8,33 @@
 #include "msp.h"
 #include "myIncludes.h"
 
-char messages[5][80] = {"Enter w to write a byte ", "Enter r to read a byte ", "Enter h to hex dump ", "Enter x for reset ","Enter b to go back to main menu "};
+char uiLines[80] = "\n\r-------------------------------------------------\n\r";
+char messages[5][80] = {" Enter w to write a byte ", " Enter r to read a byte ", " Enter h to hex dump ", " Enter x for reset "," Enter b to go back to main menu\n\r"};
 char wrongInput[80] = "Please enter a valid character";
+char wrongStringInput[80] = "Please enter valid data or address";
 char newLine [2] = {'\n','\r'};
-int i;
+int i, readValue;
 
+//int getstr()
+//{
+//    i = 0;
+//    while (x != '\r')
+//    {
+//        if ( i == 4)
+//        {
+//            putstr(wrongStringInput);
+//            putstr(newLine);
+//            break;
+//        }
+//        buffer[i] = x;
+//        i++;
+//    }
+//    readValue = atoi(buffer);
+//    snprintf(buffer,10,"%d", readValue); //Print Duty cycle
+//    putstr(buffer);
+////    printf("%d", readValue);
+//    return (readValue);
+//}
 void main(void)
 {
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
@@ -30,12 +52,15 @@ void main(void)
     //Add UART interrupt to NVIC
     NVIC->ISER[0] |= (1 << (EUSCIA0_IRQn & 31));
 
+    putstr(uiLines);
+    putstr(newLine);
     for ( i = 0; i < 5; i++)
     {
-        putstr(&messages[i][80]);
+        putstr(messages[i]);
         putstr(newLine);
     }
-
+    putstr(uiLines);
+    putstr(newLine);
     while(1)
     {
 //        for ( i = 0; i < 4; i++)

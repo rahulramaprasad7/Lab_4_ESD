@@ -11,6 +11,7 @@
 #include "msp.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <stdbool.h>
 
 //EEPROM address in write mode
@@ -20,7 +21,8 @@
 #define EEPROM_READ 0xA1
 
 uint16_t x;  //USing to echo character
-char buffer[10];  //Buffer to output serial message
+char *buffer;
+char *readInput;  //Buffer to output serial message
 
 void pinInit();
 

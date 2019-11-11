@@ -13,7 +13,7 @@ void putstr(char *buff)
     while(buff[i] != '\0') //Transmit until the NULL character is reached
     {
         while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG)); //Wait till other interrupts are cleared
-        EUSCI_A0->TXBUF = buff[i];  //Transmit by oading into TxBUF
+        EUSCI_A0->TXBUF = buff[i];  //Transmit by loading into TxBUF
         i++;
     }
 }

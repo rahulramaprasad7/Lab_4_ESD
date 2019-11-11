@@ -15,10 +15,10 @@ void write()
         sendByte(EEPROM_WRITE);
         asm(" nop");
 
-        sendByte(0x00);
+        sendByte(0x01);
         asm(" nop");
 
-        sendByte(0x03);
+        sendByte(0x05);
         asm(" nop");
 }
 
