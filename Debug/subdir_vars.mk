@@ -11,6 +11,7 @@ CMD_SRCS += \
 C_SRCS += \
 ../eereset.c \
 ../main.c \
+../pageWrite.c \
 ../pinInit.c \
 ../putstr.c \
 ../read.c \
@@ -26,6 +27,7 @@ C_SRCS += \
 C_DEPS += \
 ./eereset.d \
 ./main.d \
+./pageWrite.d \
 ./pinInit.d \
 ./putstr.d \
 ./read.d \
@@ -41,6 +43,7 @@ C_DEPS += \
 OBJS += \
 ./eereset.obj \
 ./main.obj \
+./pageWrite.obj \
 ./pinInit.obj \
 ./putstr.obj \
 ./read.obj \
@@ -56,6 +59,7 @@ OBJS += \
 OBJS__QUOTED += \
 "eereset.obj" \
 "main.obj" \
+"pageWrite.obj" \
 "pinInit.obj" \
 "putstr.obj" \
 "read.obj" \
@@ -71,6 +75,7 @@ OBJS__QUOTED += \
 C_DEPS__QUOTED += \
 "eereset.d" \
 "main.d" \
+"pageWrite.d" \
 "pinInit.d" \
 "putstr.d" \
 "read.d" \
@@ -86,6 +91,7 @@ C_DEPS__QUOTED += \
 C_SRCS__QUOTED += \
 "../eereset.c" \
 "../main.c" \
+"../pageWrite.c" \
 "../pinInit.c" \
 "../putstr.c" \
 "../read.c" \

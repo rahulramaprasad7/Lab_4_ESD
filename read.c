@@ -15,7 +15,7 @@ char read()
         sendByte(EEPROM_WRITE);
         asm(" nop");
 
-        sendByte(0x01);
+        sendByte(0x30);
         asm(" nop");
 
         startBit();

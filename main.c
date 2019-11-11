@@ -9,7 +9,7 @@
 #include "myIncludes.h"
 
 char uiLines[80] = "\n\r-------------------------------------------------\n\r";
-char messages[5][80] = {" Enter w to write a byte ", " Enter r to read a byte ", " Enter h to hex dump ", " Enter x for reset "," Enter b to go back to main menu\n\r"};
+char messages[6][80] = {" Enter w to write a byte ", " Enter r to read a byte ", " Enter h to hex dump ", " Enter p to page write "," Enter x for reset "," Enter b to go back to main menu\n\r"};
 char wrongInput[80] = "Please enter a valid character";
 char wrongStringInput[80] = "Please enter valid data or address";
 char newLine [2] = {'\n','\r'};
@@ -54,7 +54,7 @@ void main(void)
 
     putstr(uiLines);
     putstr(newLine);
-    for ( i = 0; i < 5; i++)
+    for ( i = 0; i < 6; i++)
     {
         putstr(messages[i]);
         putstr(newLine);
@@ -87,6 +87,14 @@ void main(void)
         else if (x == 'x')
         {
             eereset();
+            x = NULL; //Reset the character used to echo
+        }
+
+        else if(x == 'p')
+        {
+            startBit();
+            pageWrite();
+            stopBit();
             x = NULL; //Reset the character used to echo
         }
 //        else

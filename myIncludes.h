@@ -40,6 +40,8 @@ char read();
 
 void eereset();
 
+void pageWrite();
+
 void uartInit();
 
 void putstr(char *buff);

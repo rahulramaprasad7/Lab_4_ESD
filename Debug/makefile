@@ -12,6 +12,7 @@ GEN_CMDS__FLAG :=
 ORDERED_OBJS += \
 "./eereset.obj" \
 "./main.obj" \
+"./pageWrite.obj" \
 "./pinInit.obj" \
 "./putstr.obj" \
 "./read.obj" \
@@ -166,8 +167,8 @@ I2C_BitBang.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "eereset.obj" "main.obj" "pinInit.obj" "putstr.obj" "read.obj" "receiveByte.obj" "sendByte.obj" "startBit.obj" "startup_msp432p401r_ccs.obj" "stopBit.obj" "system_msp432p401r.obj" "uartInit.obj" "write.obj" 
-	-$(RM) "eereset.d" "main.d" "pinInit.d" "putstr.d" "read.d" "receiveByte.d" "sendByte.d" "startBit.d" "startup_msp432p401r_ccs.d" "stopBit.d" "system_msp432p401r.d" "uartInit.d" "write.d" 
+	-$(RM) "eereset.obj" "main.obj" "pageWrite.obj" "pinInit.obj" "putstr.obj" "read.obj" "receiveByte.obj" "sendByte.obj" "startBit.obj" "startup_msp432p401r_ccs.obj" "stopBit.obj" "system_msp432p401r.obj" "uartInit.obj" "write.obj" 
+	-$(RM) "eereset.d" "main.d" "pageWrite.d" "pinInit.d" "putstr.d" "read.d" "receiveByte.d" "sendByte.d" "startBit.d" "startup_msp432p401r_ccs.d" "stopBit.d" "system_msp432p401r.d" "uartInit.d" "write.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

@@ -1,1 +1,1 @@
-"./eereset.obj" "./main.obj" "./pinInit.obj" "./putstr.obj" "./read.obj" "./receiveByte.obj" "./sendByte.obj" "./startBit.obj" "./startup_msp432p401r_ccs.obj" "./stopBit.obj" "./system_msp432p401r.obj" "./uartInit.obj" "./write.obj" "../msp432p401r.cmd" -llibc.a 
+"./eereset.obj" "./main.obj" "./pageWrite.obj" "./pinInit.obj" "./putstr.obj" "./read.obj" "./receiveByte.obj" "./sendByte.obj" "./startBit.obj" "./startup_msp432p401r_ccs.obj" "./stopBit.obj" "./system_msp432p401r.obj" "./uartInit.obj" "./write.obj" "../msp432p401r.cmd" -llibc.a 
