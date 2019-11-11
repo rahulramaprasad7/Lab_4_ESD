@@ -12,12 +12,14 @@ GEN_CMDS__FLAG :=
 ORDERED_OBJS += \
 "./main.obj" \
 "./pinInit.obj" \
+"./putstr.obj" \
 "./receiveByte.obj" \
 "./sendByte.obj" \
 "./startBit.obj" \
 "./startup_msp432p401r_ccs.obj" \
 "./stopBit.obj" \
 "./system_msp432p401r.obj" \
+"./uartInit.obj" \
 "../msp432p401r.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibc.a \
@@ -161,8 +163,8 @@ I2C_BitBang.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "main.obj" "pinInit.obj" "receiveByte.obj" "sendByte.obj" "startBit.obj" "startup_msp432p401r_ccs.obj" "stopBit.obj" "system_msp432p401r.obj" 
-	-$(RM) "main.d" "pinInit.d" "receiveByte.d" "sendByte.d" "startBit.d" "startup_msp432p401r_ccs.d" "stopBit.d" "system_msp432p401r.d" 
+	-$(RM) "main.obj" "pinInit.obj" "putstr.obj" "receiveByte.obj" "sendByte.obj" "startBit.obj" "startup_msp432p401r_ccs.obj" "stopBit.obj" "system_msp432p401r.obj" "uartInit.obj" 
+	-$(RM) "main.d" "pinInit.d" "putstr.d" "receiveByte.d" "sendByte.d" "startBit.d" "startup_msp432p401r_ccs.d" "stopBit.d" "system_msp432p401r.d" "uartInit.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

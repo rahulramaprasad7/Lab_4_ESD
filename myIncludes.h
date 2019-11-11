@@ -9,13 +9,18 @@
 #define MYINCLUDES_H_
 
 #include "msp.h"
-#include "stdio.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
 
 //EEPROM address in write mode
 #define EEPROM_WRITE 0xA0
 
 //EEPROM address in read mode
 #define EEPROM_READ 0xA1
+
+uint16_t x;  //USing to echo character
+char buffer[10];  //Buffer to output serial message
 
 void pinInit();
 
@@ -26,5 +31,9 @@ void stopBit();
 void sendByte(char );
 
 char receiveByte();
+
+void uartInit();
+
+void putstr(char *buff);
 
 #endif /* MYINCLUDES_H_ */
