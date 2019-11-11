@@ -9,6 +9,7 @@ CMD_SRCS += \
 ../msp432p401r.cmd 
 
 C_SRCS += \
+../eereset.c \
 ../main.c \
 ../pinInit.c \
 ../putstr.c \
@@ -23,6 +24,7 @@ C_SRCS += \
 ../write.c 
 
 C_DEPS += \
+./eereset.d \
 ./main.d \
 ./pinInit.d \
 ./putstr.d \
@@ -37,6 +39,7 @@ C_DEPS += \
 ./write.d 
 
 OBJS += \
+./eereset.obj \
 ./main.obj \
 ./pinInit.obj \
 ./putstr.obj \
@@ -51,6 +54,7 @@ OBJS += \
 ./write.obj 
 
 OBJS__QUOTED += \
+"eereset.obj" \
 "main.obj" \
 "pinInit.obj" \
 "putstr.obj" \
@@ -65,6 +69,7 @@ OBJS__QUOTED += \
 "write.obj" 
 
 C_DEPS__QUOTED += \
+"eereset.d" \
 "main.d" \
 "pinInit.d" \
 "putstr.d" \
@@ -79,6 +84,7 @@ C_DEPS__QUOTED += \
 "write.d" 
 
 C_SRCS__QUOTED += \
+"../eereset.c" \
 "../main.c" \
 "../pinInit.c" \
 "../putstr.c" \

@@ -10,8 +10,6 @@
 char read()
 {
 /****************** EEPROM READ ***************/
-        //Send Start to read
-        startBit();
 
         //Write address to read  from EEPROM
         sendByte(EEPROM_WRITE);

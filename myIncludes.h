@@ -36,6 +36,8 @@ void write();
 
 char read();
 
+void eereset();
+
 void uartInit();
 
 void putstr(char *buff);

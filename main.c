@@ -30,7 +30,7 @@ void main(void)
     //Add UART interrupt to NVIC
     NVIC->ISER[0] |= (1 << (EUSCIA0_IRQn & 31));
 
-    for ( i = 0; i < 4; i++)
+    for ( i = 0; i < 5; i++)
     {
         putstr(&messages[i][80]);
         putstr(newLine);
@@ -56,6 +56,12 @@ void main(void)
             startBit();
             read();
             stopBit();
+            x = NULL; //Reset the character used to echo
+        }
+
+        else if (x == 'x')
+        {
+            eereset();
             x = NULL; //Reset the character used to echo
         }
 //        else
