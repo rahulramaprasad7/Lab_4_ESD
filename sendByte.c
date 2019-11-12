@@ -6,7 +6,7 @@
  */
 #include "myIncludes.h"
 
-void sendByte(char x)
+int sendByte(char x)
 {
     int i;
     for (i = 0; i < 8; i++)
@@ -34,8 +34,16 @@ void sendByte(char x)
     //Send a SCL pulse for ACK
     P6->OUT |= (BIT6);
     asm(" nop");
-    P6->OUT &= ~(BIT6);
-    asm(" nop");
+//    if((P6->IN & (~BIT7)) != 0)
+//    {
+//        putstr("\n\rAcknowledge not received\n\r");
+//        return 0;
+//    }
+//    else
+//    {
+        P6->OUT &= ~(BIT6);
+        asm(" nop");
+//    }
     P6->DIR |= BIT7;
 }
 

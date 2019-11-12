@@ -32,7 +32,7 @@ void startBit();
 
 void stopBit();
 
-void sendByte(char );
+int sendByte(char );
 
 char receiveByte();
 

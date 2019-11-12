@@ -9,7 +9,7 @@
 #include "myIncludes.h"
 
 char wrongInput[80] = "\n\rPlease enter a valid character\n\r";
-char wrongStringInput[80] = "\n\rPlease enter valid data or address";
+char wrongStringInput[80] = "\n\rPlease enter valid data or address\n\r";
 char newLine [2] = {'\n','\r'};
 int i, readValue;
 bool readCheck = false;
@@ -24,7 +24,6 @@ int getstr()
         {
             buffer[i] = '\0';
             putstr(wrongStringInput);
-            putstr(newLine);
             return 0;
         }
         else if ( readCheck == true)
@@ -61,11 +60,6 @@ void main(void)
 
     while(1)
     {
-//        for ( i = 0; i < 4; i++)
-//        {
-//            putstr(&messages[i][80]);
-//            putstr(newLine);
-//        }
         if ( x == 'w')
         {
             putstr("\n\rEnter the address\n\r");
