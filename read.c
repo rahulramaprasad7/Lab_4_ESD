@@ -7,24 +7,24 @@
 
 #include "myIncludes.h"
 
-char read()
+uint8_t read(int controlByte, int writeAddress)
 {
 /****************** EEPROM READ ***************/
 
         //Write address to read  from EEPROM
-        sendByte(EEPROM_WRITE);
+        sendByte(controlByte);
         asm(" nop");
 
-        sendByte(0x30);
+        sendByte(writeAddress);
         asm(" nop");
 
         startBit();
         //Read data from EEPROM
-        sendByte(EEPROM_READ);
+        sendByte((controlByte + 1));
         asm(" nop");
         P6->DIR &= ~BIT7;
 
-        char a = receiveByte();
+        uint8_t a = receiveByte();
         asm(" nop");
 
         P6->DIR |= BIT7;

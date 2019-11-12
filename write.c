@@ -7,18 +7,19 @@
 
 #include "myIncludes.h"
 
-void write()
+void write(int controlByte, int writeAddress, int data)
 {
 /****************** EEPROM WRITE ***************/
 
         //Write to EEPROM
-        sendByte(EEPROM_WRITE);
+
+        sendByte(controlByte);
         asm(" nop");
 
-        sendByte(0x01);
+        sendByte(writeAddress);
         asm(" nop");
 
-        sendByte(0x05);
+        sendByte(data);
         asm(" nop");
 }
 

@@ -6,33 +6,38 @@
  */
 #include "myIncludes.h"
 
-char receiveByte()
+uint8_t readReceive = 0;
+
+uint8_t receiveByte()
 {
     int i;
-    char x = 0;
+    uint8_t temp;
     //Make SDA input
     P6->DIR &= ~BIT7;
     for (i = 0; i < 8; i++)
     {
-        x &= (P6->IN >> 7);
+        temp = P6->IN;
+        temp = temp & BIT7;
+        temp = temp >> 7;
+        readReceive |= temp;
         asm(" nop");
         P6->OUT |= BIT6;
         asm(" nop");
         P6->OUT &= ~BIT6;
-        x = x << 1;
+        readReceive = readReceive << 1;
     }
     //Make SDA Output
     P6->DIR |= BIT7;
 
     //Send a NACK
     P6->OUT |= BIT7;
-    //Send a clock oulse for NACK
+    //Send a clock pulse for NACK
     P6->OUT |= BIT6;
     asm(" nop");
     P6->OUT &= ~BIT6;
     P6->OUT &= ~BIT7;
 
-    return x;
+    return readReceive;
 }
 
 

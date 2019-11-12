@@ -11,9 +11,10 @@
 char wrongInput[80] = "\n\rPlease enter a valid character\n\r";
 char wrongStringInput[80] = "\n\rPlease enter valid data or address\n\r";
 char newLine [2] = {'\n','\r'};
-int i, readValue;
+uint16_t i, readValue, writeAddress, readAddress, data, controlByte, blockNumber;
 bool readCheck = false;
 bool inputReady = false;
+char readConvert[8];
 int getstr()
 {
     memset(buffer, '\0', 10*sizeof(char)); //Reset the Buffer
@@ -34,12 +35,11 @@ int getstr()
         }
     }
     buffer[i] = '\0';
-    sscanf(buffer, "%d", &readValue);
+    sscanf(buffer, "%X", &readValue);
     putstr(newLine);
     return (readValue);
 }
 void main(void)
-
 {
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
 
@@ -62,24 +62,98 @@ void main(void)
     {
         if ( x == 'w')
         {
-            putstr("\n\rEnter the address\n\r");
+            putstr("\n\rEnter the block number\n\r");
             inputReady = true;
-            readInput = getstr();
-            memset(buffer, '\0', 10*sizeof(char)); //Reset the Buffer
-            snprintf(buffer, 10, "%d", readInput);
+            blockNumber = getstr();
+            if (!(blockNumber >= 0  && blockNumber <= 7))
+            {
+                putstr("\n\rEntered block number is not in range of the EEPROM address");
+                printMenu();
+                x = NULL; //Reset the character used to echo
+                memset(buffer, '\0', 10*sizeof(char)); //Reset the Buffer
+                inputReady = false;
+                continue;
+            }
+            //Make the control byte to write
+            controlByte = EEPROM_WRITE | ( blockNumber << 1);
             x = NULL; //Reset the character used to echo
             inputReady = false;
-            putstr(buffer);
-            putstr(newLine);
+
+            putstr("\n\rEnter the word address\n\r");
+            inputReady = true;
+            writeAddress = getstr();
+            if (!(writeAddress >= 0  && writeAddress <= 0xFF))
+            {
+                putstr("\n\rEntered word address is not in range of the EEPROM address");
+                printMenu();
+                x = NULL; //Reset the character used to echo
+                memset(buffer, '\0', 10*sizeof(char)); //Reset the Buffer
+                inputReady = false;
+                continue;
+            }
+            x = NULL; //Reset the character used to echo
+            inputReady = false;
+
+            putstr("\n\rEnter the data\n\r");
+            inputReady = true;
+            data = getstr();
+            if (!(data >= 0  && data <= 0xFF))
+            {
+                putstr("\n\rEntered data is not between 0 and FF");
+                printMenu();
+                x = NULL; //Reset the character used to echo
+                memset(buffer, '\0', 10*sizeof(char)); //Reset the Buffer
+                inputReady = false;
+                continue;
+            }
+            x = NULL; //Reset the character used to echo
+            inputReady = false;
+
             startBit();
-            write();
+            write(controlByte, writeAddress, data);
             stopBit();
         }
 
         else if (x == 'r')
         {
+            putstr("\n\rEnter the block number\n\r");
+            inputReady = true;
+            blockNumber = getstr();
+            if (!(blockNumber >= 0  && blockNumber <= 7))
+            {
+                putstr("\n\rEntered block number is not in range of the EEPROM address");
+                printMenu();
+                x = NULL; //Reset the character used to echo
+                memset(buffer, '\0', 10*sizeof(char)); //Reset the Buffer
+                inputReady = false;
+                continue;
+            }
+            //Make the control byte to write address
+            controlByte = EEPROM_WRITE | ( blockNumber << 1);
+            x = NULL; //Reset the character used to echo
+            inputReady = false;
+
+            putstr("\n\rEnter the word address\n\r");
+            inputReady = true;
+            writeAddress = getstr();
+            if (!(writeAddress >= 0  && writeAddress <= 0xFF))
+            {
+                putstr("\n\rEntered word address is not in range of the EEPROM address");
+                printMenu();
+                x = NULL; //Reset the character used to echo
+                memset(buffer, '\0', 10*sizeof(char)); //Reset the Buffer
+                inputReady = false;
+                continue;
+            }
+            x = NULL; //Reset the character used to echo
+            inputReady = false;
+
             startBit();
-            read();
+            uint8_t byteRead = read(controlByte, writeAddress);
+            snprintf(readConvert, 8, "%u",byteRead);
+            putstr(newLine);
+            putstr(readConvert);
+            putstr(newLine);
             stopBit();
             x = NULL; //Reset the character used to echo
         }

@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <stdbool.h>
 
 //EEPROM address in write mode
@@ -22,6 +23,7 @@
 
 uint16_t x;  //USing to echo character
 char buffer[10];
+
 int readInput;  //Buffer to output serial message
 
 extern char newLine [2];
@@ -32,13 +34,13 @@ void startBit();
 
 void stopBit();
 
-int sendByte(char );
+void sendByte(char );
 
-char receiveByte();
+uint8_t receiveByte();
 
-void write();
+void write(int , int , int );
 
-char read();
+uint8_t read(int , int );
 
 void eereset();
 
