@@ -15,13 +15,10 @@ void uartInit()
     EUSCI_A0->CTLW0 |= EUSCI_A_CTLW0_SWRST;  //Enabling software reset
     EUSCI_A0->CTLW0 = EUSCI_A_CTLW0_SWRST | EUSCI_B_CTLW0_SSEL__SMCLK;  //Enabling clock
     /* Baudrate calculation
-     * Fclk = 3Mhz, Baudrate = 460800
-     * N = Fclk/ BaudRate = 6.51
-     * BR = 6
-     * BRS = (6 - 6.51) = 0.51 which approximately maps to 0xAA
-     */
-    EUSCI_A0->BRW = 6;
-    EUSCI_A0->MCTLW = (0xAA << EUSCI_A_MCTLW_BRS_OFS);
+     * Fclk = 3Mhz, Baudrate = 230400
+    */
+    EUSCI_A0->BRW = 13;
+    EUSCI_A0->MCTLW = 0;
 
     EUSCI_A0->CTLW0 &= ~EUSCI_A_CTLW0_SWRST;  //Disabling reset
     EUSCI_A0->IFG &= ~EUSCI_A_IFG_RXIFG;      //Clearing Rx flag

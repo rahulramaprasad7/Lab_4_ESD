@@ -21,8 +21,10 @@
 #define EEPROM_READ 0xA1
 
 uint16_t x;  //USing to echo character
-char *buffer;
-char *readInput;  //Buffer to output serial message
+char buffer[10];
+int readInput;  //Buffer to output serial message
+
+extern char newLine [2];
 
 void pinInit();
 
@@ -43,6 +45,8 @@ void eereset();
 void pageWrite();
 
 void uartInit();
+
+void printMenu();
 
 void putstr(char *buff);
 

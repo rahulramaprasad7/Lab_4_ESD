@@ -13,6 +13,7 @@ C_SRCS += \
 ../main.c \
 ../pageWrite.c \
 ../pinInit.c \
+../printMenu.c \
 ../putstr.c \
 ../read.c \
 ../receiveByte.c \
@@ -29,6 +30,7 @@ C_DEPS += \
 ./main.d \
 ./pageWrite.d \
 ./pinInit.d \
+./printMenu.d \
 ./putstr.d \
 ./read.d \
 ./receiveByte.d \
@@ -45,6 +47,7 @@ OBJS += \
 ./main.obj \
 ./pageWrite.obj \
 ./pinInit.obj \
+./printMenu.obj \
 ./putstr.obj \
 ./read.obj \
 ./receiveByte.obj \
@@ -61,6 +64,7 @@ OBJS__QUOTED += \
 "main.obj" \
 "pageWrite.obj" \
 "pinInit.obj" \
+"printMenu.obj" \
 "putstr.obj" \
 "read.obj" \
 "receiveByte.obj" \
@@ -77,6 +81,7 @@ C_DEPS__QUOTED += \
 "main.d" \
 "pageWrite.d" \
 "pinInit.d" \
+"printMenu.d" \
 "putstr.d" \
 "read.d" \
 "receiveByte.d" \
@@ -93,6 +98,7 @@ C_SRCS__QUOTED += \
 "../main.c" \
 "../pageWrite.c" \
 "../pinInit.c" \
+"../printMenu.c" \
 "../putstr.c" \
 "../read.c" \
 "../receiveByte.c" \

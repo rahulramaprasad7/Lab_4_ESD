@@ -8,34 +8,39 @@
 #include "msp.h"
 #include "myIncludes.h"
 
-char uiLines[80] = "\n\r-------------------------------------------------\n\r";
-char messages[6][80] = {" Enter w to write a byte ", " Enter r to read a byte ", " Enter h to hex dump ", " Enter p to page write "," Enter x for reset "," Enter b to go back to main menu\n\r"};
-char wrongInput[80] = "Please enter a valid character";
-char wrongStringInput[80] = "Please enter valid data or address";
+char wrongInput[80] = "\n\rPlease enter a valid character\n\r";
+char wrongStringInput[80] = "\n\rPlease enter valid data or address";
 char newLine [2] = {'\n','\r'};
 int i, readValue;
-
-//int getstr()
-//{
-//    i = 0;
-//    while (x != '\r')
-//    {
-//        if ( i == 4)
-//        {
-//            putstr(wrongStringInput);
-//            putstr(newLine);
-//            break;
-//        }
-//        buffer[i] = x;
-//        i++;
-//    }
-//    readValue = atoi(buffer);
-//    snprintf(buffer,10,"%d", readValue); //Print Duty cycle
-//    putstr(buffer);
-////    printf("%d", readValue);
-//    return (readValue);
-//}
+bool readCheck = false;
+bool inputReady = false;
+int getstr()
+{
+    memset(buffer, '\0', 10*sizeof(char)); //Reset the Buffer
+    i = 0;
+    while (x != '\r')
+    {
+        if ( i == 6)
+        {
+            buffer[i] = '\0';
+            putstr(wrongStringInput);
+            putstr(newLine);
+            return 0;
+        }
+        else if ( readCheck == true)
+        {
+            buffer[i] = x;
+            i++;
+            readCheck = false;
+        }
+    }
+    buffer[i] = '\0';
+    sscanf(buffer, "%d", &readValue);
+    putstr(newLine);
+    return (readValue);
+}
 void main(void)
+
 {
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
 
@@ -52,15 +57,8 @@ void main(void)
     //Add UART interrupt to NVIC
     NVIC->ISER[0] |= (1 << (EUSCIA0_IRQn & 31));
 
-    putstr(uiLines);
-    putstr(newLine);
-    for ( i = 0; i < 6; i++)
-    {
-        putstr(messages[i]);
-        putstr(newLine);
-    }
-    putstr(uiLines);
-    putstr(newLine);
+    printMenu();
+
     while(1)
     {
 //        for ( i = 0; i < 4; i++)
@@ -70,10 +68,18 @@ void main(void)
 //        }
         if ( x == 'w')
         {
+            putstr("\n\rEnter the address\n\r");
+            inputReady = true;
+            readInput = getstr();
+            memset(buffer, '\0', 10*sizeof(char)); //Reset the Buffer
+            snprintf(buffer, 10, "%d", readInput);
+            x = NULL; //Reset the character used to echo
+            inputReady = false;
+            putstr(buffer);
+            putstr(newLine);
             startBit();
             write();
             stopBit();
-            x = NULL; //Reset the character used to echo
         }
 
         else if (x == 'r')
@@ -113,4 +119,6 @@ void EUSCIA0_IRQHandler(void)
         x = EUSCI_A0->RXBUF;  //Receive a character
     }
     EUSCI_A0->TXBUF = x;  //Transmit the character
+    if(inputReady)
+        readCheck = true;
 }
