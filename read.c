@@ -23,6 +23,7 @@ uint8_t read(int controlByte, int writeAddress)
         sendByte((controlByte + 1));
         asm(" nop");
         P6->DIR &= ~BIT7;
+        asm(" nop");
 
         uint8_t a = receiveByte();
         asm(" nop");

@@ -21,10 +21,11 @@ int getstr()
     i = 0;
     while (x != '\r')
     {
-        if ( i == 6)
+        if ( i == 4)
         {
             buffer[i] = '\0';
             putstr(wrongStringInput);
+            printMenu();
             return 0;
         }
         else if ( readCheck == true)
@@ -35,8 +36,8 @@ int getstr()
         }
     }
     buffer[i] = '\0';
-    sscanf(buffer, "%X", &readValue);
-    putstr(newLine);
+    sscanf(buffer, "%x", &readValue);
+    x = NULL;
     return (readValue);
 }
 void main(void)
@@ -65,12 +66,11 @@ void main(void)
             putstr("\n\rEnter the block number\n\r");
             inputReady = true;
             blockNumber = getstr();
-            if (!(blockNumber >= 0  && blockNumber <= 7))
+            if (!(blockNumber <= 7))
             {
                 putstr("\n\rEntered block number is not in range of the EEPROM address");
                 printMenu();
                 x = NULL; //Reset the character used to echo
-                memset(buffer, '\0', 10*sizeof(char)); //Reset the Buffer
                 inputReady = false;
                 continue;
             }
@@ -82,12 +82,11 @@ void main(void)
             putstr("\n\rEnter the word address\n\r");
             inputReady = true;
             writeAddress = getstr();
-            if (!(writeAddress >= 0  && writeAddress <= 0xFF))
+            if (!(writeAddress <= 0xFF))
             {
                 putstr("\n\rEntered word address is not in range of the EEPROM address");
                 printMenu();
                 x = NULL; //Reset the character used to echo
-                memset(buffer, '\0', 10*sizeof(char)); //Reset the Buffer
                 inputReady = false;
                 continue;
             }
@@ -97,12 +96,11 @@ void main(void)
             putstr("\n\rEnter the data\n\r");
             inputReady = true;
             data = getstr();
-            if (!(data >= 0  && data <= 0xFF))
+            if (!(data <= 0xFF))
             {
                 putstr("\n\rEntered data is not between 0 and FF");
                 printMenu();
                 x = NULL; //Reset the character used to echo
-                memset(buffer, '\0', 10*sizeof(char)); //Reset the Buffer
                 inputReady = false;
                 continue;
             }
@@ -112,6 +110,7 @@ void main(void)
             startBit();
             write(controlByte, writeAddress, data);
             stopBit();
+            putstr(newLine);
         }
 
         else if (x == 'r')
@@ -119,12 +118,11 @@ void main(void)
             putstr("\n\rEnter the block number\n\r");
             inputReady = true;
             blockNumber = getstr();
-            if (!(blockNumber >= 0  && blockNumber <= 7))
+            if (!(blockNumber <= 7))
             {
                 putstr("\n\rEntered block number is not in range of the EEPROM address");
                 printMenu();
                 x = NULL; //Reset the character used to echo
-                memset(buffer, '\0', 10*sizeof(char)); //Reset the Buffer
                 inputReady = false;
                 continue;
             }
@@ -136,12 +134,11 @@ void main(void)
             putstr("\n\rEnter the word address\n\r");
             inputReady = true;
             writeAddress = getstr();
-            if (!(writeAddress >= 0  && writeAddress <= 0xFF))
+            if (!(writeAddress <= 0xFF))
             {
                 putstr("\n\rEntered word address is not in range of the EEPROM address");
                 printMenu();
                 x = NULL; //Reset the character used to echo
-                memset(buffer, '\0', 10*sizeof(char)); //Reset the Buffer
                 inputReady = false;
                 continue;
             }
@@ -150,18 +147,21 @@ void main(void)
 
             startBit();
             uint8_t byteRead = read(controlByte, writeAddress);
-            snprintf(readConvert, 8, "%u",byteRead);
+            snprintf(readConvert, 8, "%x",byteRead);
             putstr(newLine);
             putstr(readConvert);
             putstr(newLine);
             stopBit();
+            memset(readConvert, '\0', 8*sizeof(char)); //Reset the Buffer
             x = NULL; //Reset the character used to echo
+            putstr(newLine);
         }
 
         else if (x == 'x')
         {
             eereset();
             x = NULL; //Reset the character used to echo
+            putstr(newLine);
         }
 
         else if(x == 'p')
@@ -170,6 +170,7 @@ void main(void)
             pageWrite();
             stopBit();
             x = NULL; //Reset the character used to echo
+            putstr(newLine);
         }
 //        else
 //        {
