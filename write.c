@@ -7,7 +7,7 @@
 
 #include "myIncludes.h"
 
-void write(int controlByte, int writeAddress, int data)
+void write(uint8_t controlByte, uint8_t writeAddress, uint8_t data)
 {
 /****************** EEPROM WRITE ***************/
 

@@ -15,13 +15,13 @@ uint16_t i, readValue, writeAddress, readAddress, data, controlByte, blockNumber
 bool readCheck = false;
 bool inputReady = false;
 char readConvert[8];
-int getstr()
+uint16_t getstr()
 {
     memset(buffer, '\0', 10*sizeof(char)); //Reset the Buffer
     i = 0;
     while (x != '\r')
     {
-        if ( i == 4)
+        if ( i == 5)
         {
             buffer[i] = '\0';
             putstr(wrongStringInput);
@@ -36,7 +36,7 @@ int getstr()
         }
     }
     buffer[i] = '\0';
-    sscanf(buffer, "%x", &readValue);
+    sscanf(buffer, "%X", &readValue);
     x = NULL;
     return (readValue);
 }
@@ -63,26 +63,10 @@ void main(void)
     {
         if ( x == 'w')
         {
-            putstr("\n\rEnter the block number\n\r");
+            putstr("\n\rEnter the address\n\r");
             inputReady = true;
             blockNumber = getstr();
-            if (!(blockNumber <= 7))
-            {
-                putstr("\n\rEntered block number is not in range of the EEPROM address");
-                printMenu();
-                x = NULL; //Reset the character used to echo
-                inputReady = false;
-                continue;
-            }
-            //Make the control byte to write
-            controlByte = EEPROM_WRITE | ( blockNumber << 1);
-            x = NULL; //Reset the character used to echo
-            inputReady = false;
-
-            putstr("\n\rEnter the word address\n\r");
-            inputReady = true;
-            writeAddress = getstr();
-            if (!(writeAddress <= 0xFF))
+            if ((blockNumber > 0x7FF))
             {
                 putstr("\n\rEntered word address is not in range of the EEPROM address");
                 printMenu();
@@ -96,7 +80,7 @@ void main(void)
             putstr("\n\rEnter the data\n\r");
             inputReady = true;
             data = getstr();
-            if (!(data <= 0xFF))
+            if ((data > 0xFF))
             {
                 putstr("\n\rEntered data is not between 0 and FF");
                 printMenu();
@@ -107,34 +91,20 @@ void main(void)
             x = NULL; //Reset the character used to echo
             inputReady = false;
 
+            controlByte = EEPROM_WRITE | (( blockNumber >> 8) << 1);
+            blockNumber &= 0x00FF;
             startBit();
-            write(controlByte, writeAddress, data);
+            write(controlByte, blockNumber, data);
             stopBit();
             putstr(newLine);
         }
 
         else if (x == 'r')
         {
-            putstr("\n\rEnter the block number\n\r");
+            putstr("\n\rEnter the address\n\r");
             inputReady = true;
             blockNumber = getstr();
-            if (!(blockNumber <= 7))
-            {
-                putstr("\n\rEntered block number is not in range of the EEPROM address");
-                printMenu();
-                x = NULL; //Reset the character used to echo
-                inputReady = false;
-                continue;
-            }
-            //Make the control byte to write address
-            controlByte = EEPROM_WRITE | ( blockNumber << 1);
-            x = NULL; //Reset the character used to echo
-            inputReady = false;
-
-            putstr("\n\rEnter the word address\n\r");
-            inputReady = true;
-            writeAddress = getstr();
-            if (!(writeAddress <= 0xFF))
+            if ((blockNumber > 0x7FF))
             {
                 putstr("\n\rEntered word address is not in range of the EEPROM address");
                 printMenu();
@@ -145,9 +115,11 @@ void main(void)
             x = NULL; //Reset the character used to echo
             inputReady = false;
 
+            controlByte = EEPROM_WRITE | (( blockNumber >> 8) << 1);
+            blockNumber &= 0x00FF;
             startBit();
-            uint8_t byteRead = read(controlByte, writeAddress);
-            snprintf(readConvert, 8, "%x",byteRead);
+            uint8_t byteRead = read(controlByte, blockNumber);
+            snprintf(readConvert, 8, "%X",byteRead);
             putstr(newLine);
             putstr(readConvert);
             putstr(newLine);
@@ -171,6 +143,11 @@ void main(void)
             stopBit();
             x = NULL; //Reset the character used to echo
             putstr(newLine);
+        }
+
+        else if(x == 'h')
+        {
+
         }
 //        else
 //        {

@@ -38,7 +38,7 @@ void sendByte(char );
 
 uint8_t receiveByte();
 
-void write(int , int , int );
+void write(uint8_t , uint8_t , uint8_t );
 
 uint8_t read(int , int );
 
