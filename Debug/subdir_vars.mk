@@ -9,8 +9,10 @@ CMD_SRCS += \
 ../msp432p401r.cmd 
 
 C_SRCS += \
+../ack.c \
 ../eereset.c \
 ../main.c \
+../nack..c \
 ../pageWrite.c \
 ../pinInit.c \
 ../printMenu.c \
@@ -26,8 +28,10 @@ C_SRCS += \
 ../write.c 
 
 C_DEPS += \
+./ack.d \
 ./eereset.d \
 ./main.d \
+./nack..d \
 ./pageWrite.d \
 ./pinInit.d \
 ./printMenu.d \
@@ -43,8 +47,10 @@ C_DEPS += \
 ./write.d 
 
 OBJS += \
+./ack.obj \
 ./eereset.obj \
 ./main.obj \
+./nack..obj \
 ./pageWrite.obj \
 ./pinInit.obj \
 ./printMenu.obj \
@@ -60,8 +66,10 @@ OBJS += \
 ./write.obj 
 
 OBJS__QUOTED += \
+"ack.obj" \
 "eereset.obj" \
 "main.obj" \
+"nack..obj" \
 "pageWrite.obj" \
 "pinInit.obj" \
 "printMenu.obj" \
@@ -77,8 +85,10 @@ OBJS__QUOTED += \
 "write.obj" 
 
 C_DEPS__QUOTED += \
+"ack.d" \
 "eereset.d" \
 "main.d" \
+"nack..d" \
 "pageWrite.d" \
 "pinInit.d" \
 "printMenu.d" \
@@ -94,8 +104,10 @@ C_DEPS__QUOTED += \
 "write.d" 
 
 C_SRCS__QUOTED += \
+"../ack.c" \
 "../eereset.c" \
 "../main.c" \
+"../nack..c" \
 "../pageWrite.c" \
 "../pinInit.c" \
 "../printMenu.c" \

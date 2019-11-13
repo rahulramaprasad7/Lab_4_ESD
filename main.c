@@ -11,10 +11,11 @@
 char wrongInput[80] = "\n\rPlease enter a valid character\n\r";
 char wrongStringInput[80] = "\n\rPlease enter valid data or address\n\r";
 char newLine [2] = {'\n','\r'};
-uint16_t i, readValue, writeAddress, readAddress, data, controlByte, blockNumber;
+uint16_t i, readValue, writeAddress, readAddress, data, controlByte, blockNumber, endAddress, temp;
 bool readCheck = false;
 bool inputReady = false;
 char readConvert[8];
+char addressConvert[8];
 uint16_t getstr()
 {
     memset(buffer, '\0', 10*sizeof(char)); //Reset the Buffer
@@ -63,18 +64,18 @@ void main(void)
     {
         if ( x == 'w')
         {
+            x = NULL; //Reset the character used to echo
             putstr("\n\rEnter the address\n\r");
             inputReady = true;
             blockNumber = getstr();
             if ((blockNumber > 0x7FF))
             {
+                x = NULL; //Reset the character used to echo
                 putstr("\n\rEntered word address is not in range of the EEPROM address");
                 printMenu();
-                x = NULL; //Reset the character used to echo
                 inputReady = false;
                 continue;
             }
-            x = NULL; //Reset the character used to echo
             inputReady = false;
 
             putstr("\n\rEnter the data\n\r");
@@ -82,13 +83,13 @@ void main(void)
             data = getstr();
             if ((data > 0xFF))
             {
+                x = NULL; //Reset the character used to echo
                 putstr("\n\rEntered data is not between 0 and FF");
                 printMenu();
-                x = NULL; //Reset the character used to echo
                 inputReady = false;
                 continue;
             }
-            x = NULL; //Reset the character used to echo
+//            x = NULL; //Reset the character used to echo
             inputReady = false;
 
             controlByte = EEPROM_WRITE | (( blockNumber >> 8) << 1);
@@ -96,23 +97,31 @@ void main(void)
             startBit();
             write(controlByte, blockNumber, data);
             stopBit();
+            //Acknowledgement polling
+//            while (ackCheck != true)
+//            {
+//                startBit();
+//                sendByte(controlByte);
+//            }
+
             putstr(newLine);
         }
 
         else if (x == 'r')
         {
+            x = NULL; //Reset the character used to echo
             putstr("\n\rEnter the address\n\r");
             inputReady = true;
             blockNumber = getstr();
+            readAddress = blockNumber;
             if ((blockNumber > 0x7FF))
             {
-                putstr("\n\rEntered word address is not in range of the EEPROM address");
-                printMenu();
                 x = NULL; //Reset the character used to echo
+                putstr("\n\rEntered word address is not in range of the EEPROM address\n\r");
+                printMenu();
                 inputReady = false;
                 continue;
             }
-            x = NULL; //Reset the character used to echo
             inputReady = false;
 
             controlByte = EEPROM_WRITE | (( blockNumber >> 8) << 1);
@@ -120,13 +129,15 @@ void main(void)
             startBit();
             uint8_t byteRead = read(controlByte, blockNumber);
             snprintf(readConvert, 8, "%X",byteRead);
+            snprintf(addressConvert, 8, "%X",readAddress);
             putstr(newLine);
+            putstr(addressConvert);
+            putstr(":");
             putstr(readConvert);
-            putstr(newLine);
-            stopBit();
             memset(readConvert, '\0', 8*sizeof(char)); //Reset the Buffer
-            x = NULL; //Reset the character used to echo
-            putstr(newLine);
+            memset(addressConvert, '\0', 8*sizeof(char)); //Reset the Buffer
+            stopBit();
+//            x = NULL; //Reset the character used to echo
         }
 
         else if (x == 'x')
@@ -138,22 +149,116 @@ void main(void)
 
         else if(x == 'p')
         {
+            putstr("\n\rEnter the address\n\r");
+            inputReady = true;
+            blockNumber = getstr();
+            if ((blockNumber > 0x7EF))
+            {
+                x = NULL; //Reset the character used to echo
+                putstr("\n\rEntered word address is not in range of the EEPROM address");
+                printMenu();
+                inputReady = false;
+                continue;
+            }
+            x = NULL; //Reset the character used to echo
+            inputReady = false;
+
+            putstr("\n\rEnter the data\n\r");
+            inputReady = true;
+            data = getstr();
+            if ((data > 0xFF))
+            {
+                x = NULL; //Reset the character used to echo
+                putstr("\n\rEntered data is not between 0 and FF");
+                printMenu();
+                inputReady = false;
+                continue;
+            }
+            x = NULL; //Reset the character used to echo
+            inputReady = false;
+
+            controlByte = EEPROM_WRITE | (( blockNumber >> 8) << 1);
+            blockNumber &= 0x00FF;
             startBit();
-            pageWrite();
+            pageWrite(controlByte, blockNumber, data);
             stopBit();
             x = NULL; //Reset the character used to echo
-            putstr(newLine);
         }
 
         else if(x == 'h')
         {
+            putstr("\n\rEnter the starting address\n\r");
+            inputReady = true;
+            blockNumber = getstr();
+            readAddress = blockNumber;
+            if ((readAddress > 0x7FF))
+            {
+                x = NULL; //Reset the character used to echo
+                putstr("\n\rEntered address is not in range of the EEPROM address\n\r");
+                printMenu();
+                inputReady = false;
+                continue;
+            }
+            x = NULL; //Reset the character used to echo
+            inputReady = false;
 
+            putstr("\n\rEnter the ending address\n\r");
+            inputReady = true;
+            temp = getstr();
+            endAddress = temp;
+            if ((endAddress > 0x7FF || endAddress < readAddress))
+            {
+                putstr("\n\rEntered address is invalid\n\r");
+                printMenu();
+                x = NULL; //Reset the character used to echo
+                inputReady = false;
+                continue;
+            }
+            x = NULL; //Reset the character used to echo
+            inputReady = false;
+
+            controlByte = EEPROM_WRITE | (( blockNumber >> 8) << 1);
+            blockNumber &= 0x00FF;
+            startBit();
+            //Write address to read  from EEPROM
+            sendByte(controlByte);
+            asm(" nop");
+
+            sendByte(writeAddress);
+            asm(" nop");
+
+            startBit();
+            //Read data from EEPROM
+            sendByte((controlByte + 1));
+            asm(" nop");
+            P6->DIR &= ~BIT7;
+            asm(" nop");
+            int j, k;
+            for ( j = 0; j < (endAddress - readAddress); j += 16)
+            {
+                snprintf(addressConvert, 8, "%X",(readAddress + j));
+                putstr(addressConvert);
+                putstr(":");
+                for (k = j; k < (j+16) && k < (endAddress - readAddress); k++)
+                {
+                    putstr(" ");
+                    uint8_t a = receiveByte();
+                    snprintf(readConvert, 8, "%2X",a);
+                    putstr(readConvert);
+                    memset(readConvert, '\0', 8*sizeof(char)); //Reset the Buffer
+                    asm(" nop");
+                    ack();
+                }
+                putstr("\n\r");
+                memset(addressConvert, '\0', 8*sizeof(char)); //Reset the Buffer
+            }
+            stopBit();
         }
-//        else
-//        {
-//            putstr(wrongInput);
-//            x = NULL; //Reset the character used to echo
-//        }
+        else if (x == 'm')
+        {
+            printMenu();
+            x = NULL;  //Resetting echo character
+        }
     }
 }
 

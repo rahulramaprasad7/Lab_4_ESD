@@ -6,6 +6,8 @@
  */
 #include "myIncludes.h"
 
+bool ackCheck = false;
+
 void sendByte(char x)
 {
     int i;
@@ -34,6 +36,8 @@ void sendByte(char x)
     //Send a SCL pulse for ACK
     P6->OUT |= (BIT6);
     asm(" nop");
+//    if((((P6->IN) & BIT7) >> 7) == 0 )
+//        ackCheck = true;
     P6->OUT &= ~(BIT6);
     asm(" nop");
     P6->DIR |= BIT7;

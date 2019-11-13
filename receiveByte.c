@@ -32,15 +32,6 @@ uint8_t receiveByte()
     //Make SDA Output
     P6->DIR |= BIT7;
     asm(" nop");
-    //Send a NACK
-    P6->OUT |= BIT7;
-    //Send a clock pulse for NACK
-    P6->OUT |= BIT6;
-    asm(" nop");
-    P6->OUT &= ~BIT6;
-    asm(" nop");
-    P6->OUT &= ~BIT7;
-
     return (readReceive);
 }
 

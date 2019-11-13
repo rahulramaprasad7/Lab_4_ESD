@@ -23,7 +23,7 @@
 
 uint16_t x;  //USing to echo character
 char buffer[10];
-
+extern bool ackCheck;
 int readInput;  //Buffer to output serial message
 
 extern char newLine [2];
@@ -42,9 +42,13 @@ void write(uint8_t , uint8_t , uint8_t );
 
 uint8_t read(int , int );
 
+void nack();
+
+void ack();
+
 void eereset();
 
-void pageWrite();
+void pageWrite(uint16_t , uint16_t , uint16_t);
 
 void uartInit();
 

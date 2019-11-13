@@ -7,19 +7,19 @@
 
 #include "myIncludes.h"
 
-void pageWrite()
+void pageWrite(uint16_t controlByte, uint16_t blockNumber, uint16_t data)
 {
 
     int i;
     //Write to EEPROM
-    sendByte(EEPROM_WRITE);
+    sendByte(controlByte);
     asm(" nop");
 
-    sendByte(0x01);
+    sendByte(blockNumber);
     asm(" nop");
 
     for ( i = 0; i < 16; i++)
-        sendByte(0x05);
+        sendByte(data);
     asm(" nop");
 }
 

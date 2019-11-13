@@ -27,6 +27,7 @@ uint8_t read(int controlByte, int writeAddress)
 
         uint8_t a = receiveByte();
         asm(" nop");
+        nack();
 
         P6->DIR |= BIT7;
         return a;
