@@ -12,8 +12,9 @@ char wrongInput[80] = "\n\rPlease enter a valid character\n\r";
 char wrongStringInput[80] = "\n\rPlease enter valid data or address\n\r";
 char newLine [2] = {'\n','\r'};
 uint16_t i, readValue, writeAddress, readAddress, data, controlByte, blockNumber, endAddress, temp;
-bool readCheck = false;
-bool inputReady = false;
+volatile bool readCheck = false;
+volatile bool inputReady = false;
+volatile bool interruptCheck = false;
 char readConvert[8];
 char addressConvert[8];
 uint16_t getstr()
@@ -278,10 +279,21 @@ void main(void)
         else if (x == 'i')
         {
             startBit();
+            sendByte(0x41);
+            uint8_t portRead = receiveByte();
+            ack();
+            stopBit();
+            startBit();
             sendByte(0x40);
-            sendByte(0x01);
+            portRead = (portRead <<1) + 1;
+            sendByte(portRead);
             stopBit();
             x = NULL;
+        }
+        if ( interruptCheck == true)
+        {
+            putstr("\n\rInterrupt detected\n\r");
+            interruptCheck = false;
         }
     }
 }
@@ -303,7 +315,7 @@ void PORT1_IRQHandler(void)
     // Toggling the output on the LED
     if(P1->IFG & BIT5)
     {
-
+        interruptCheck = true;
     }
     P1->IFG &= ~BIT5;
 }
