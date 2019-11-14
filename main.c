@@ -43,6 +43,15 @@ uint16_t getstr()
 }
 void main(void)
 {
+    P1->DIR = ~(uint8_t) BIT5;
+    P1->OUT = BIT5;
+    P1->REN = BIT5;                         // Enable pull-up resistor (P1.5 output high)
+    P1->SEL0 = 0;
+    P1->SEL1 = 0;
+    P1->IES = BIT5;                         // Interrupt on high-to-low transition
+    P1->IFG = 0;                            // Clear all P1 interrupt flags
+    P1->IE = BIT5;                          // Enable interrupt for P1.5
+
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
 
     //Initialise SDA and SCL pins
@@ -57,6 +66,8 @@ void main(void)
 
     //Add UART interrupt to NVIC
     NVIC->ISER[0] |= (1 << (EUSCIA0_IRQn & 31));
+    // Enable Port 1 interrupt on the NVIC
+    NVIC->ISER[1] = 1 << ((PORT1_IRQn) & 31);
 
     printMenu();
 
@@ -96,15 +107,15 @@ void main(void)
             blockNumber &= 0x00FF;
             startBit();
             write(controlByte, blockNumber, data);
-            stopBit();
             //Acknowledgement polling
 //            while (ackCheck != true)
 //            {
 //                startBit();
 //                sendByte(controlByte);
 //            }
-
+            stopBit();
             putstr(newLine);
+            eereset();
         }
 
         else if (x == 'r')
@@ -138,6 +149,7 @@ void main(void)
             memset(addressConvert, '\0', 8*sizeof(char)); //Reset the Buffer
             stopBit();
 //            x = NULL; //Reset the character used to echo
+            eereset();
         }
 
         else if (x == 'x')
@@ -183,6 +195,7 @@ void main(void)
             pageWrite(controlByte, blockNumber, data);
             stopBit();
             x = NULL; //Reset the character used to echo
+            eereset();
         }
 
         else if(x == 'h')
@@ -206,7 +219,7 @@ void main(void)
             inputReady = true;
             temp = getstr();
             endAddress = temp;
-            if ((endAddress > 0x7FF || endAddress < readAddress))
+            if (((endAddress > 0x7FF) || (endAddress < readAddress)))
             {
                 putstr("\n\rEntered address is invalid\n\r");
                 printMenu();
@@ -217,6 +230,7 @@ void main(void)
             x = NULL; //Reset the character used to echo
             inputReady = false;
 
+            putstr("\n\r");
             controlByte = EEPROM_WRITE | (( blockNumber >> 8) << 1);
             blockNumber &= 0x00FF;
             startBit();
@@ -234,12 +248,12 @@ void main(void)
             P6->DIR &= ~BIT7;
             asm(" nop");
             int j, k;
-            for ( j = 0; j < (endAddress - readAddress); j += 16)
+            for ( j = 0; j <= (endAddress - readAddress); j += 16)
             {
-                snprintf(addressConvert, 8, "%X",(readAddress + j));
+                snprintf(addressConvert, 8, "%3X",(readAddress + j));
                 putstr(addressConvert);
                 putstr(":");
-                for (k = j; k < (j+16) && k < (endAddress - readAddress); k++)
+                for (k = j; k < (j+16) && k <= (endAddress - readAddress); k++)
                 {
                     putstr(" ");
                     uint8_t a = receiveByte();
@@ -253,11 +267,21 @@ void main(void)
                 memset(addressConvert, '\0', 8*sizeof(char)); //Reset the Buffer
             }
             stopBit();
+            eereset();
         }
         else if (x == 'm')
         {
             printMenu();
             x = NULL;  //Resetting echo character
+        }
+
+        else if (x == 'i')
+        {
+            startBit();
+            sendByte(0x40);
+            sendByte(0x01);
+            stopBit();
+            x = NULL;
         }
     }
 }
@@ -272,4 +296,14 @@ void EUSCIA0_IRQHandler(void)
     EUSCI_A0->TXBUF = x;  //Transmit the character
     if(inputReady)
         readCheck = true;
+}
+
+void PORT1_IRQHandler(void)
+{
+    // Toggling the output on the LED
+    if(P1->IFG & BIT5)
+    {
+
+    }
+    P1->IFG &= ~BIT5;
 }
