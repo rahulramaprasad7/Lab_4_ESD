@@ -10,7 +10,6 @@
 
 char wrongInput[80] = "\n\rPlease enter a valid character\n\r";
 char wrongStringInput[80] = "\n\rPlease enter valid data or address\n\r";
-char newLine [2] = {'\n','\r'};
 uint16_t i, readValue, writeAddress, readAddress, data, controlByte, blockNumber, endAddress, temp;
 volatile bool readCheck = false;
 volatile bool inputReady = false;
@@ -21,14 +20,14 @@ uint16_t getstr()
 {
     memset(buffer, '\0', 10*sizeof(char)); //Reset the Buffer
     i = 0;
-    while (x != '\r')
+    while (x != '\n')
     {
         if ( i == 5)
         {
             buffer[i] = '\0';
             putstr(wrongStringInput);
             printMenu();
-            return 0;
+            return 10000;
         }
         else if ( readCheck == true)
         {
@@ -80,10 +79,12 @@ void main(void)
             putstr("\n\rEnter the address\n\r");
             inputReady = true;
             blockNumber = getstr();
+            if(blockNumber == 10000)
+                continue;
             if ((blockNumber > 0x7FF))
             {
                 x = NULL; //Reset the character used to echo
-                putstr("\n\rEntered word address is not in range of the EEPROM address");
+                putstr("\n\rEntered word address is not in range of the EEPROM address\n\r");
                 printMenu();
                 inputReady = false;
                 continue;
@@ -93,6 +94,8 @@ void main(void)
             putstr("\n\rEnter the data\n\r");
             inputReady = true;
             data = getstr();
+            if(data == 10000)
+                continue;
             if ((data > 0xFF))
             {
                 x = NULL; //Reset the character used to echo
@@ -115,8 +118,8 @@ void main(void)
 //                sendByte(controlByte);
 //            }
             stopBit();
-            putstr(newLine);
-            eereset();
+            putstr("\n\r");
+//            eereset();
         }
 
         else if (x == 'r')
@@ -125,6 +128,8 @@ void main(void)
             putstr("\n\rEnter the address\n\r");
             inputReady = true;
             blockNumber = getstr();
+            if(blockNumber == 10000)
+                continue;
             readAddress = blockNumber;
             if ((blockNumber > 0x7FF))
             {
@@ -142,7 +147,7 @@ void main(void)
             uint8_t byteRead = read(controlByte, blockNumber);
             snprintf(readConvert, 8, "%X",byteRead);
             snprintf(addressConvert, 8, "%X",readAddress);
-            putstr(newLine);
+            putstr("\n\r");
             putstr(addressConvert);
             putstr(":");
             putstr(readConvert);
@@ -150,14 +155,14 @@ void main(void)
             memset(addressConvert, '\0', 8*sizeof(char)); //Reset the Buffer
             stopBit();
 //            x = NULL; //Reset the character used to echo
-            eereset();
+//            eereset();
         }
 
         else if (x == 'x')
         {
             eereset();
             x = NULL; //Reset the character used to echo
-            putstr(newLine);
+            putstr("\n\r");
         }
 
         else if(x == 'p')
@@ -165,6 +170,8 @@ void main(void)
             putstr("\n\rEnter the address\n\r");
             inputReady = true;
             blockNumber = getstr();
+            if(blockNumber == 10000)
+                continue;
             if ((blockNumber > 0x7EF))
             {
                 x = NULL; //Reset the character used to echo
@@ -179,6 +186,8 @@ void main(void)
             putstr("\n\rEnter the data\n\r");
             inputReady = true;
             data = getstr();
+            if(data == 10000)
+                continue;
             if ((data > 0xFF))
             {
                 x = NULL; //Reset the character used to echo
@@ -196,7 +205,7 @@ void main(void)
             pageWrite(controlByte, blockNumber, data);
             stopBit();
             x = NULL; //Reset the character used to echo
-            eereset();
+//            eereset();
         }
 
         else if(x == 'h')
@@ -204,6 +213,8 @@ void main(void)
             putstr("\n\rEnter the starting address\n\r");
             inputReady = true;
             blockNumber = getstr();
+            if(blockNumber == 10000)
+                continue;
             readAddress = blockNumber;
             if ((readAddress > 0x7FF))
             {
@@ -219,6 +230,8 @@ void main(void)
             putstr("\n\rEnter the ending address\n\r");
             inputReady = true;
             temp = getstr();
+            if(blockNumber == 10000)
+                continue;
             endAddress = temp;
             if (((endAddress > 0x7FF) || (endAddress < readAddress)))
             {
@@ -268,7 +281,7 @@ void main(void)
                 memset(addressConvert, '\0', 8*sizeof(char)); //Reset the Buffer
             }
             stopBit();
-            eereset();
+//            eereset();
         }
         else if (x == 'm')
         {
