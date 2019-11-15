@@ -280,7 +280,7 @@ void main(void)
             sendByte(controlByte);
             asm(" nop");
 
-            sendByte(writeAddress);
+            sendByte(blockNumber);
             asm(" nop");
 
             startBit();
