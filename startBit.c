@@ -1,8 +1,8 @@
 /*
  * startBit.c
  *
- *  Created on: 08-Nov-2019
- *      Author: Rahul
+ *  Sends the start
+ *  bit.
  */
 
 #include "myIncludes.h"

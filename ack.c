@@ -1,8 +1,8 @@
 /*
  * ack.c
  *
- *  Created on: 12-Nov-2019
- *      Author: Rahul
+ *  Sends an
+ *  Acknowledgement.
  */
 
 #include "myIncludes.h"

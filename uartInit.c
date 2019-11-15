@@ -1,8 +1,8 @@
 /*
  * uartInit.c
  *
- *  Created on: 10-Nov-2019
- *      Author: Rahul
+ *  Initialises UART
+ *  Registers.
  */
 
 #include "myIncludes.h"

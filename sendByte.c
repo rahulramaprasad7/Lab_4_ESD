@@ -1,8 +1,8 @@
 /*
  * sendByte.c
  *
- *  Created on: 08-Nov-2019
- *      Author: Rahul
+ *  Sends a byte
+ *  starting from MSB.
  */
 #include "myIncludes.h"
 

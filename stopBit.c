@@ -1,8 +1,8 @@
 /*
  * stopBit.c
  *
- *  Created on: 08-Nov-2019
- *      Author: Rahul
+ *  Sends the stop
+ *  bit.
  */
 
 #include "myIncludes.h"

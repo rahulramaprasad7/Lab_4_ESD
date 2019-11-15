@@ -1,8 +1,10 @@
 /*
  * write.c
  *
- *  Created on: 10-Nov-2019
- *      Author: Rahul
+ * Writes user nput data
+ *  to the user input address.
+ *
+ *
  */
 
 #include "myIncludes.h"

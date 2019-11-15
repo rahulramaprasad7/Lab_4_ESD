@@ -1,8 +1,8 @@
 /*
  * myIncludes.h
- *
- *  Created on: 08-Nov-2019
- *      Author: Rahul
+ * Contains the function prototypes
+ * for all the functions related to I2C
+ * and EEPROM drivers.
  */
 
 #ifndef MYINCLUDES_H_

@@ -1,8 +1,8 @@
 /*
  * nack..c
  *
- *  Created on: 12-Nov-2019
- *      Author: Rahul
+ *  Sends a NACK
+ *  signal.
  */
 
 #include "myIncludes.h"

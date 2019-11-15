@@ -1,8 +1,9 @@
 /*
  * eereset.c
  *
- *  Created on: 10-Nov-2019
- *      Author: Rahul
+ *  Sends the reset signal
+ *  as specified in the
+ *  Application note 709.
  */
 
 #include "myIncludes.h"

@@ -1,8 +1,8 @@
 /*
  * printMenu.c
  *
- *  Created on: 11-Nov-2019
- *      Author: Rahul
+ * Prints the main menu
+ * for User Interface.
  */
 
 #include "myIncludes.h"

@@ -1,8 +1,10 @@
 /*
  * pin_init.c
  *
- *  Created on: 08-Nov-2019
- *      Author: Rahul
+ *  Initialises
+ *  the SDA and SCL pins
+ *  to high to ensure bus free
+ *  condition.
  */
 #include "myIncludes.h"
 

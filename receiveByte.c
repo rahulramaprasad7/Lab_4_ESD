@@ -1,8 +1,8 @@
 /*
  * receiveByte.c
  *
- *  Created on: 09-Nov-2019
- *      Author: Rahul
+ *  Processes the received
+ *  byte and returns the int value.
  */
 #include "myIncludes.h"
 

@@ -1,8 +1,8 @@
 /*
  * read.c
  *
- *  Created on: 10-Nov-2019
- *      Author: Rahul
+ *  Reads a byte from the
+ *  user input address.
  */
 
 #include "myIncludes.h"

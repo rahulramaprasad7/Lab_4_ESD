@@ -1,8 +1,8 @@
 /*
  * putstr.c
  *
- *  Created on: 10-Nov-2019
- *      Author: Rahul
+ *  Sends the serial
+ *  message on UI.
  */
 
 #include "myIncludes.h"
