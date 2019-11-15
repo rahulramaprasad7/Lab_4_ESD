@@ -9,6 +9,8 @@
 
 void eereset()
 {
+    P6->DIR |= BIT7;
+    P6->DIR |= BIT7;
     int i;
     //Send start bit
     startBit();

@@ -9,6 +9,7 @@
 
 void startBit()
 {
+
     //Make sure SDA is high
     P6->OUT |= BIT7;
     asm(" nop");
