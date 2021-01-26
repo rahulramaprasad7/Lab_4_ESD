@@ -6,7 +6,7 @@ Add your header comment here, name, date, etc. See the Coding style guideline do
 
 
 #include "main.h"
-
+#include <stdio.h>
 
 static void delayApproxOneSecond(void)
 {
@@ -31,7 +31,7 @@ int appMain(gecko_configuration_t *config)
 
   // Students:
   // add a function call to gpioInit() here.
-
+  gpioInit();
 
 
 
@@ -41,13 +41,12 @@ int appMain(gecko_configuration_t *config)
     // For assignment 1 we want a 50-50 duty cycle:
     // LED(s) on for ~1 sec, LED(s) off ~1 sec.
 	delayApproxOneSecond();
-	gpioLed0SetOn();
-	//gpioLed1SetOn();
-
+//	gpioLed0SetOn();
+	gpioLed1SetOn();
 
 	delayApproxOneSecond();
-	gpioLed0SetOff();
-	//gpioLed1SetOff();
+//	gpioLed0SetOff();
+	gpioLed1SetOff();
 
 
   } // while(1)
