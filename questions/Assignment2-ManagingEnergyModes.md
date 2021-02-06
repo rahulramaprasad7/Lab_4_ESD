@@ -24,11 +24,11 @@ EM3         |   TBD      |        TBD
 
 ***EM0***  
 Period average current    
-![em0_avg_current_period][em0_avg_current_period]  
+![em0_avg_current_period](../Screenshots/Em0_Period.jpg)  
 Average Current with LED ***off***  
-![em0_avg_current_ledoff][em0_avg_current_ledoff]  
+![em0_avg_current_ledoff](../Screenshots/EM0_Off.jpg)    
 Average Current with LED ***on***  
-![em0_avg_current_ledon][em0_avg_current_ledon]  
+![em0_avg_current_ledon](../Screenshots/EM0_On.jpg)   
 
 ***EM1***  
 Period average current    
@@ -40,7 +40,7 @@ Average Current with LED ***on***
 
 ***EM2***  
 Period average current  
-![em2_avg_current_period][em2_avg_current_period]  
+![em2_avg_current_period](../Screenshots/EM2_Period.jpg)  
 Average Current with LED ***off***  
 ![em2_avg_current_ledoff][em2_avg_current_ledoff]  
 Average Current with LED ***on***  
