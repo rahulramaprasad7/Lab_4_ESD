@@ -40,7 +40,7 @@ Average Current with LED ***on***
 
 ***EM2***  
 Period average current  
-![em2_avg_current_period][em2_avg_current_period]  
+![em2_avg_current_period](../Screenshots/EM2_Period.jpg)  
 Average Current with LED ***off***  
 ![em2_avg_current_ledoff][em2_avg_current_ledoff]  
 Average Current with LED ***on***  
