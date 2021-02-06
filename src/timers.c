@@ -1,9 +1,15 @@
 /*
- * timers.c
+ * @file timers.c
+ * @brief Timer initialization
  *
- *  Created on: 04-Feb-2021
- *      Author: Rahul
+ * Source file that contains timer setup
+ * and enabling functions.
+ *
+ * @authors Rahul Ramaprasad
+ * @date February 5th 2021
+ * @verison 1.0
  */
+
 
 // Reference : https://github.com/SiliconLabs/peripheral_examples/blob/master/series2/letimer/one_shot_output_compare/src/main.c
 

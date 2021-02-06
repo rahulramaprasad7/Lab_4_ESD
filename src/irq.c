@@ -1,8 +1,13 @@
 /*
- * irq.c
+ * @file irq.c
+ * @brief Interrupt initialization
  *
- *  Created on: 04-Feb-2021
- *      Author: Rahul
+ * Source file that contains interrupt service
+ * handler.
+ *
+ * @authors Rahul Ramaprasad
+ * @date February 5th 2021
+ * @verison 1.0
  */
 
 #include "irq.h"

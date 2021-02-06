@@ -1,8 +1,13 @@
 /*
- * oscillators.c
+ * @file oscillators.c
+ * @brief Oscillator initialization
  *
- *  Created on: 04-Feb-2021
- *      Author: Rahul
+ * Source file that contains different
+ * oscillator configurations.
+ *
+ * @authors Rahul Ramaprasad
+ * @date February 5th 2021
+ * @verison 1.0
  */
 
 #include "oscillators.h"
