@@ -1,30 +1,24 @@
 /*
-
-Add your header comment here, name, date, etc. See the Coding style guideline document
-
-*/
+ * @file main.c
+ * @brief Source file that runs the timer code
+ *
+ * This source file turns the LED on and off
+ * for a given time period and sleep configurations.
+ *
+ * @authors Rahul Ramaprasad
+ * @date February 5th 2021
+ * @verison 1.0
+ */
 
 
 #include "main.h"
 #include <stdio.h>
-
-static void delayApproxOneSecond(void)
-{
-	/**
-	 * Wait loops are a bad idea in general!  Don't copy this code in future assignments!
-	 * We'll discuss how to do this a better way in the next assignment.
-	 */
-	volatile int i;
-	for (i = 0; i < 3500000; ) {
-		  i=i+1;
-	}
-
-} // delayApproxOneSecond()
-
+#include "timers.h"
+#include "oscillators.h"
+#include "irq.h"
 
 int appMain(gecko_configuration_t *config)
 {
-
 
   // Initialize stack
   gecko_init(config);
@@ -32,23 +26,20 @@ int appMain(gecko_configuration_t *config)
   // Students:
   // add a function call to gpioInit() here.
   gpioInit();
+  initOscillator();
+  initTimer();
+  __NVIC_EnableIRQ(LETIMER0_IRQn);
+  SLEEP_Init(NULL, NULL);
 
-
-
+  SLEEP_EnergyMode_t putToSleep = LOWEST_ENERGY_MODE + 1;
+  SLEEP_SleepBlockBegin(putToSleep);
   /* Infinite loop */
-  while (1) {
-
-    // For assignment 1 we want a 50-50 duty cycle:
-    // LED(s) on for ~1 sec, LED(s) off ~1 sec.
-	delayApproxOneSecond();
-//	gpioLed0SetOn();
-	gpioLed1SetOn();
-
-	delayApproxOneSecond();
-//	gpioLed0SetOff();
-	gpioLed1SetOff();
-
-
+  while (1)
+  {
+	  if(LOWEST_ENERGY_MODE != 0)
+	  {
+		 SLEEP_Sleep();
+	  }
   } // while(1)
 
 } // appMain()
