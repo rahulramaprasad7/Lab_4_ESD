@@ -92,11 +92,11 @@ typedef struct {
 #define I2CSPM_INIT_DEFAULT                                                    \
   { I2C0,                       /* Use I2C instance 0 */                       \
     gpioPortC,                  /* SCL port */                                 \
-    11,                         /* SCL pin */                                  \
+    10,                         /* SCL pin */                                  \
     gpioPortC,                  /* SDA port */                                 \
-    10,                         /* SDA pin */                                  \
-    15,                         /* Location of SCL */                          \
-    15,                         /* Location of SDA */                          \
+    11,                         /* SDA pin */                                  \
+    14,                         /* Location of SCL */                          \
+    16,                         /* Location of SDA */                          \
     0,                          /* Use currently configured reference clock */ \
     I2C_FREQ_STANDARD_MAX,      /* Set to standard rate  */                    \
     i2cClockHLRStandard,        /* Set to use 4:4 low/high duty cycle */       \

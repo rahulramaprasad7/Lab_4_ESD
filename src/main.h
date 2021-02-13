@@ -19,10 +19,17 @@
 #include "native_gecko.h"
 #include "sleep.h"
 #include "gpio.h"
+#include "log.h"
+#include "timers.h"
+#include "oscillators.h"
+#include "irq.h"
+#include "i2c.h"
+#include "scheduler.h"
 
-#define LOWEST_ENERGY_MODE 0
-#define LETIMER_PERIOD_MS 2250
-#define LED_ON_TIME_MS 175
+
+#define LOWEST_ENERGY_MODE 2
+#define LETIMER_PERIOD_MS 3000
+#define LED_ON_TIME_MS 1000
 
 /*
  * @brief Run the main()

@@ -15,22 +15,31 @@
 
 #include "timers.h"
 
-void initTimer()
-{
-#if LOWEST_ENERGY_MODE < 3
-	#define ACTUAL_CLK_FREQ 32768
-	#define PRESCALER_VALUE 4
-#else
-	#define ACTUAL_CLK_FREQ 1000
-	#define PRESCALER_VALUE 1
-#endif
-
 #define VALUE_TO_LOAD (LETIMER_PERIOD_MS*(ACTUAL_CLK_FREQ/PRESCALER_VALUE))/1000
 
+void initTimer()
+{
 	LETIMER_Init_TypeDef letimerInit = LETIMER_INIT_DEFAULT;
 	letimerInit.topValue = VALUE_TO_LOAD;
-	LETIMER_CompareSet(LETIMER0, 1, (LED_ON_TIME_MS * (ACTUAL_CLK_FREQ/PRESCALER_VALUE)) / 1000);
-	LETIMER_IntEnable(LETIMER0, LETIMER_IF_COMP1  | LETIMER_IF_UF);
+//	LETIMER_CompareSet(LETIMER0, 1, VALUE_TO_LOAD);
+	LETIMER_IntEnable(LETIMER0, LETIMER_IF_UF);
     LETIMER_Init(LETIMER0, &letimerInit);
+}
+
+void timerWaitUs(uint32_t us_wait)
+{
+	if(us_wait > 300000)
+	{
+		LOG_INFO("Input to the wait function exceeds limits resetting it to 300ms");
+		us_wait = 300000;
+	}
+	uint32_t current_count = LETIMER_CounterGet(LETIMER0);
+	uint32_t toCount = (us_wait * ACTUAL_CLK_FREQ/PRESCALER_VALUE)/1000;
+	uint32_t countToPoll;
+	if(current_count - toCount < 0)
+		countToPoll = (VALUE_TO_LOAD) - (toCount - current_count);
+	else
+		countToPoll = current_count - toCount;
+	while(LETIMER_CounterGet(LETIMER0) != countToPoll);
 }
 

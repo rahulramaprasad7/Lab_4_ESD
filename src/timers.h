@@ -26,4 +26,25 @@
  */
 void initTimer();
 
+/*
+ * @brief Wait function
+ *
+ * Function which waits for
+ * a given amount of micro
+ * seconds using LETIMER0 ticks.
+ *
+ * @param Micro seconds to wait
+ *
+ * @return void
+ */
+void timerWaitUs(uint32_t us_wait);
+
+#if LOWEST_ENERGY_MODE < 3
+	#define ACTUAL_CLK_FREQ 32768
+	#define PRESCALER_VALUE 4
+#else
+	#define ACTUAL_CLK_FREQ 1000
+	#define PRESCALER_VALUE 1
+#endif
+
 #endif /* SRC_TIMERS_H_ */
