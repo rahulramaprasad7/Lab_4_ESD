@@ -67,9 +67,9 @@ int appMain(gecko_configuration_t *config)
 //	  uint32_t curr_event = getEvent();
 //	  processEvent(curr_event);
 	  gpioLed0SetOn();
-	  timerWaitUs(20000);
+	  timerWaitUs(20);
 	  gpioLed0SetOff();
-	  timerWaitUs(20000);
+	  timerWaitUs(20);
   } // while(1)
 
 } // appMain()

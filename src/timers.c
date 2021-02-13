@@ -34,7 +34,8 @@ void timerWaitUs(uint32_t us_wait)
 		us_wait = 300000;
 	}
 	uint32_t current_count = LETIMER_CounterGet(LETIMER0);
-	uint32_t toCount = (us_wait * ACTUAL_CLK_FREQ/PRESCALER_VALUE)/1000;
+	uint32_t us_tick = 1000000 / (ACTUAL_CLK_FREQ/PRESCALER_VALUE);
+	uint32_t toCount = us_wait * us_tick;
 	uint32_t countToPoll;
 	if(current_count - toCount < 0)
 		countToPoll = (VALUE_TO_LOAD) - (toCount - current_count);
