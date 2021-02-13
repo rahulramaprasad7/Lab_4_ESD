@@ -1,10 +1,15 @@
 /*
- * i2c.c
+ * @file i2c.c
+ * @brief I2C initialization
  *
- *  Created on: 12-Feb-2021
- *      Author: Rahul
+ * Source file that contains I2C setup
+ * and enabling functions.
+ *
+ * @authors Rahul Ramaprasad
+ * @date February 5th 2021
+ * @verison 1.0
  */
-#include "i2c.h"
+
 #include "main.h"
 
 void i2c_init()
@@ -45,11 +50,7 @@ float measure_temp()
 		return -1;
 	}
 	unsigned int data16 = ((unsigned int) read_temp[0] << 8) | (unsigned int) (read_temp[1] & 0xFC);
-	LOG_INFO("%d", read_temp[0]);
-	LOG_INFO("%d", read_temp[1]);
-	LOG_INFO("%d", data16);
 	float temp = (float) (-46.85 + (175.72 * data16 / (float) 65536));
-	LOG_INFO("%d", (int)temp);
 	return temp;
 }
 

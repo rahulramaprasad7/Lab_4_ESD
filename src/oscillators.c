@@ -24,4 +24,5 @@ void initOscillator()
 	CMU_ClockEnable(cmuClock_LETIMER0, true);
 	CMU_ClockSelectSet(cmuClock_LFA, cmuSelect_ULFRCO);
 #endif
+	uint32_t frequency = CMU_ClockFreqGet (cmuClock_LETIMER0);
 }

@@ -1,8 +1,8 @@
 /*
  * @file main.c
- * @brief Source file that runs the timer code
+ * @brief Source file that runs the timer and I2C code
  *
- * This source file turns the LED on and off
+ * This source file measures the temperature
  * for a given time period and sleep configurations.
  *
  * @authors Rahul Ramaprasad
@@ -20,13 +20,13 @@ int appMain(gecko_configuration_t *config)
   // Initialize stack
   gecko_init(config);
 
-  // Students:
-  // add a function call to gpioInit() here.
+  //Initialise the GPIO
   gpioInit();
 
   //Initialise the logger
   logInit();
 
+  //Flush out the log buffer
   logFlush();
 
   //Initialise oscillator
@@ -35,41 +35,32 @@ int appMain(gecko_configuration_t *config)
   //Initialise timer
   initTimer();
 
-  GPIO_PinModeSet(gpioPortD, 15, gpioModePushPull, false);
-  GPIO_PinOutSet(gpioPortD, 15);
-
-
-//  LOG_INFO("Initialising I2C\n");
-//  i2c_init();
-//  timerWaitUs(80000);
-//  send_temp_command();
-//  timerWaitUs(11000);
-//  float x = measure_temp();
-//  LOG_INFO("%f", x);
-
   //Enable timer interrupt
   __NVIC_EnableIRQ(LETIMER0_IRQn);
 
   //Initialise the sleep module
   SLEEP_Init(NULL, NULL);
 
-  SLEEP_EnergyMode_t putToSleep = LOWEST_ENERGY_MODE + 1;
+  //Sleep in the deepest possible mode
+  SLEEP_EnergyMode_t putToSleep = sleepEM3;
   SLEEP_SleepBlockBegin(putToSleep);
+
   /* Infinite loop */
   while (1)
   {
-//	  if(!eventsPresent())
-//	  {
-//		 logFlush();
-//		 SLEEP_Sleep();
-//	  }
-//
-//	  uint32_t curr_event = getEvent();
-//	  processEvent(curr_event);
-	  gpioLed0SetOn();
-	  timerWaitUs(20);
-	  gpioLed0SetOff();
-	  timerWaitUs(20);
+	  //Check if events are pending
+	  if(!eventsPresent())
+	  {
+		 //Sleep if no events are pending
+		 logFlush();
+		 SLEEP_Sleep();
+	  }
+
+	  //Get the next event to process
+	  uint32_t curr_event = getEvent();
+
+	  //Process the event
+	  processEvent(curr_event);
   } // while(1)
 
 } // appMain()

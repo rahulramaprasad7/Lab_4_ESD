@@ -25,6 +25,7 @@
 #include "irq.h"
 #include "i2c.h"
 #include "scheduler.h"
+#include "em_core.h"
 
 
 #define LOWEST_ENERGY_MODE 2
