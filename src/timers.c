@@ -37,13 +37,18 @@ void initTimer()
     LETIMER_Enable(LETIMER0, true);
 }
 
-void timerWaitUs(uint32_t us_wait)
+inline void timerWaitUs(uint32_t us_wait)
 {
 	uint32_t tickInUs = 1000000 / (ACTUAL_CLK_FREQ/PRESCALER_VALUE);
 	if(us_wait < tickInUs)
 	{
 		LOG_INFO("Input to the wait function exceeds the minimum limit, resetting it to %d", tickInUs);
 		us_wait = tickInUs;
+	}
+	if((us_wait/tickInUs) > VALUE_TO_LOAD)
+	{
+		LOG_INFO("Input to the wait function exceeds the maximum limit, resetting it to %d", VALUE_TO_LOAD);
+		us_wait = VALUE_TO_LOAD;
 	}
 	uint32_t current_count = LETIMER_CounterGet(LETIMER0);
 

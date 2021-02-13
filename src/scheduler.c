@@ -73,7 +73,7 @@ void processEvent(uint32_t curr_event)
 			//Read the temperature
 			float x = measure_temp();
 			//Print the temperature
-			printf("Temperature is %fC\n", x);
+			LOG_INFO("Temperature is %fC", x);
 			//Disable the sensor
 			GPIO_PinOutClear(gpioPortD, 15);
 			break;

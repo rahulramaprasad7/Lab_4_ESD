@@ -28,7 +28,7 @@
 #include "em_core.h"
 
 
-#define LOWEST_ENERGY_MODE 2
+#define LOWEST_ENERGY_MODE 3
 #define LETIMER_PERIOD_MS 3000
 #define LED_ON_TIME_MS 1000
 
