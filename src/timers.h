@@ -39,12 +39,15 @@ void initTimer();
  */
 void timerWaitUs(uint32_t us_wait);
 
-#if LOWEST_ENERGY_MODE < 3
+/* DOS - this #if is not functioning correctly, I moved it to timers.c
+ *       where it seems to be functioning? This is weird.
+#if (LOWEST_ENERGY_MODE < 3)
 	#define ACTUAL_CLK_FREQ 32768
 	#define PRESCALER_VALUE 4
 #else
 	#define ACTUAL_CLK_FREQ 1000
 	#define PRESCALER_VALUE 1
 #endif
+*/
 
 #endif /* SRC_TIMERS_H_ */

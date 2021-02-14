@@ -36,18 +36,25 @@ int appMain(gecko_configuration_t *config)
   initTimer();
 
   //Enable timer interrupt
-  __NVIC_EnableIRQ(LETIMER0_IRQn);
+  __NVIC_EnableIRQ(LETIMER0_IRQn); // DOS: Why are you calling the __NVIC_EnableIRQ()
+                                   // not NVIC_EnableIRQ() ?
 
   //Initialise the sleep module
-  SLEEP_Init(NULL, NULL);
+  SLEEP_Init(NULL, NULL); // DOS: Are you sure this is doing what you expect to do?
+                          // You should be calling: SLEEP_InitEx() which takes a pointer
+                          // SLEEP_Init_t type, which should be zeroed out, no call backs.
 
   //Sleep in the deepest possible mode
-  SLEEP_EnergyMode_t putToSleep = sleepEM3;
-  SLEEP_SleepBlockBegin(putToSleep);
+  // DOS: If we want the MCU to sleep down to EM3, we don't call SLEEP_SleepBlockBegin()
+  //      I posted a table of what to do for EM0 to EM3 to the slack channel and in my
+  //      lecture slides.
+  //SLEEP_EnergyMode_t putToSleep = sleepEM3;
+  //SLEEP_SleepBlockBegin(putToSleep);
 
   /* Infinite loop */
   while (1)
   {
+
 	  //Check if events are pending
 	  if(!eventsPresent())
 	  {
@@ -61,6 +68,15 @@ int appMain(gecko_configuration_t *config)
 
 	  //Process the event
 	  processEvent(curr_event);
+
+
+	  /* DOS: This works now
+	  gpioLed0SetOn();
+	  timerWaitUs(1000000);
+	  gpioLed0SetOff();
+	  timerWaitUs(1000000);
+	  */
+
   } // while(1)
 
 } // appMain()
