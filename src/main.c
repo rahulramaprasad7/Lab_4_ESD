@@ -16,7 +16,7 @@
 
 int appMain(gecko_configuration_t *config)
 {
-
+	threeSecondCount = 0;
   // Initialize stack
   gecko_init(config);
 

@@ -36,14 +36,25 @@ void schedulerInit();
 bool eventsPresent();
 
 /*
- * @brief Sets an event
+ * @brief Sets an event for LETIMER0 UF
  *
  * Sets an event for the scheduler
- * to process
+ * to process when the timer underflows
  *
  * @return void
  */
-void setSchedulerEventTempRead();
+void setSchedulerEventUF();
+
+/*
+ * @brief Sets an event for LETIMER0 COMP1
+ *
+ * Sets an event for the scheduler
+ * to process when the timer compare
+ * register 1 is set
+ *
+ * @return void
+ */
+void setSchedulerEventCOMP1();
 
 /*
  * @brief Fetch event

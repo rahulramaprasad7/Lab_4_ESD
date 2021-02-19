@@ -27,6 +27,8 @@
 #include "scheduler.h"
 #include "em_core.h"
 
+extern int threeSecondCount;
+
 
 #define LOWEST_ENERGY_MODE 3
 #define LETIMER_PERIOD_MS 3000

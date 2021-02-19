@@ -12,15 +12,24 @@
 
 #include "scheduler.h"
 
+int threeSecondCount;
+
 void schedulerInit()
 {
 	eventStatus = 0;
 }
 
-void setSchedulerEventTempRead()
+void setSchedulerEventUF()
 {
 	//Set the last bit to indicate the event has to be processed
 	eventStatus |= 1;
+	threeSecondCount++;
+}
+
+void setSchedulerEventCOMP1()
+{
+	//Set the last bit to indicate the event has to be processed
+	eventStatus |= 2;
 }
 
 uint32_t getEvent()
@@ -74,8 +83,12 @@ void processEvent(uint32_t curr_event)
 			float x = measure_temp();
 			//Print the temperature
 			LOG_INFO("Temperature is %fC", x);
+			LOG_INFO("Timestamp is %d", loggerGetTimestamp());
 			//Disable the sensor
 			GPIO_PinOutClear(gpioPortD, 15);
+			break;
+
+		case 2 :
 			break;
 
 		default :

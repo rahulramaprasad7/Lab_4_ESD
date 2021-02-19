@@ -19,7 +19,7 @@ void LETIMER0_IRQHandler()
 	{
 		LETIMER_IntClear(LETIMER0, LETIMER_IF_UF);
 		CORE_irqState_t irqstate = CORE_EnterCritical();
-		setSchedulerEventTempRead();
+		setSchedulerEventUF();
 		CORE_ExitCritical(irqstate);
 	}
 }
