@@ -39,9 +39,5 @@ void I2C0_IRQHandler(void)
 	{
 		setSchedulerEventI2C0_Read();
 	}
-	else if(ret < 0)
-	{
-		LOG_INFO("I2C Transfer not completed, return status %d", ret);
-	}
 	CORE_ExitCritical(irqstate);
 }

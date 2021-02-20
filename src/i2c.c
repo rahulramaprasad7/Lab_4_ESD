@@ -30,7 +30,11 @@ void send_temp_command()
 	seq.buf[0].data = arr;
 	seq.buf[0].len = 1;
 	NVIC_EnableIRQ(I2C0_IRQn);
-	I2C_TransferInit(I2C0, &seq);
+	I2C_TransferReturn_TypeDef ret  = I2C_TransferInit(I2C0, &seq);
+	if(ret < 0)
+	{
+		LOG_INFO("I2C Transfer not completed, return status %d", ret);
+	}
 }
 
 void read_temperature()
@@ -42,7 +46,11 @@ void read_temperature()
 	seq.buf[0].data = &read_temp[0];
 	seq.buf[0].len = 2;
 	NVIC_EnableIRQ(I2C0_IRQn);
-	I2C_TransferInit(I2C0, &seq);
+	I2C_TransferReturn_TypeDef ret = I2C_TransferInit(I2C0, &seq);
+	if(ret < 0)
+	{
+		LOG_INFO("I2C Transfer not completed, return status %d", ret);
+	}
 }
 
 float measure_temp()
