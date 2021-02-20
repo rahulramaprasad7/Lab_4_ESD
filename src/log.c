@@ -10,8 +10,7 @@
 #include "retargetserial.h"
 #include "log.h"
 #include <stdbool.h>
-
-
+#include "timers.h"
 int threeSecondCount;
 #if INCLUDE_LOGGING
 /**
@@ -36,8 +35,7 @@ uint32_t loggerGetTimestamp(void)
        //           and not return 0. This will be the function to call for your graded
        //           assignments.
        
-       //return letimerMilliseconds();
-	   return (threeSecondCount);
+       return letimerMilliseconds();
 	   
     #endif
 }

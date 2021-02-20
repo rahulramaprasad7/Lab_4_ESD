@@ -13,12 +13,14 @@
 #ifndef SRC_I2C_H_
 #define SRC_I2C_H_
 
+#include "em_i2c.h"
 #include "i2cspm.h"
 #include "main.h"
 
 #define device_address 0x40
 
 #define MEASURE_TEMP_NO_HOLD_MASTER 0xF3
+
 
 /*
  * @brief Initialize I2C
@@ -41,6 +43,16 @@ void i2c_init();
 void send_temp_command();
 
 /*
+ * @brief Read I2C
+ *
+ * Read the temperature
+ * from the sensor
+ *
+ * @return void
+ */
+void read_temperature();
+
+/*
  * @brief Measure temperature
  *
  * Read the temperature and convert it
@@ -49,6 +61,7 @@ void send_temp_command();
  * @return float
  */
 float measure_temp();
+
 
 
 #endif /* SRC_I2C_H_ */

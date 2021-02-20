@@ -22,15 +22,20 @@ void schedulerInit()
 void setSchedulerEventUF()
 {
 	//Set the last bit to indicate the event has to be processed
-	eventStatus |= 1;
+	eventStatus |= UF_MASK;
 	threeSecondCount++;
 }
 
 void setSchedulerEventCOMP1()
 {
-	//Set the last bit to indicate the event has to be processed
-	eventStatus |= 2;
+	//Set the second last bit to indicate the event has to be processed
+	eventStatus |= COMP1_MASK;
 }
+void setSchedulerEventI2C0_Read()
+{
+	eventStatus |= I2C0_MASK_READ;
+}
+
 
 uint32_t getEvent()
 {
@@ -38,16 +43,14 @@ uint32_t getEvent()
 	uint32_t tempEvent = eventStatus;
 	for(uint32_t i = 0; i < 32; i++)
 	{
-		if(eventStatus & 0x1)
+		if(eventStatus & 1)
 		{
 			eventStatus &= ~(1 << i);
-			CORE_ExitCritical(irqstate);
-			return (i + 1);
 		}
-		tempEvent = tempEvent >> 1;
+		eventStatus = eventStatus >> 1;
 	}
 	CORE_ExitCritical(irqstate);
-	return 0;
+	return tempEvent;
 }
 
 bool eventsPresent()
@@ -58,41 +61,66 @@ bool eventsPresent()
 		return false;
 }
 
-void processEvent(uint32_t curr_event)
+void i2c_state_machine(uint32_t event)
 {
-	switch(curr_event)
+	enum states current_state;
+	static enum states next_state = STATE0_TIMER_WAIT;
+	current_state = next_state;
+	float x;
+	switch(current_state)
 	{
-		case 0 :
-			LOG_INFO("For some reason no events were scheduled");
+		case STATE0_TIMER_WAIT:
+			next_state = STATE0_TIMER_WAIT;
+			if(event & UF_MASK)
+			{
+				i2c_init();
+				//Enable sensor through GPIO
+				GPIO_PinModeSet(gpioPortD, 15, gpioModePushPull, false);
+				GPIO_PinOutSet(gpioPortD, 15);
+				timerWaitUs(80000);
+				next_state = STATE1_WARMUP;
+			}
 			break;
 
-		//Do temp measurement stuff
-		case 1 :
-			//Enable sensor through GPIO
-			GPIO_PinModeSet(gpioPortD, 15, gpioModePushPull, false);
-			GPIO_PinOutSet(gpioPortD, 15);
-			//Wait for stablisation
-			timerWaitUs(80000);
-			//Initialise i2c module
-			i2c_init();
-			//Send the command to measure temperature
-			send_temp_command();
-			//Wait for some time before reading back the temperature
-			timerWaitUs(11000);
-			//Read the temperature
-			float x = measure_temp();
-			//Print the temperature
-			LOG_INFO("Temperature is %fC", x);
-			LOG_INFO("Timestamp is %d", loggerGetTimestamp());
-			//Disable the sensor
-			GPIO_PinOutClear(gpioPortD, 15);
+		case STATE1_WARMUP:
+			next_state = STATE1_WARMUP;
+			if(event & COMP1_MASK)
+			{
+				SLEEP_SleepBlockBegin(sleepEM2);
+				//Send the command to measure temperature
+				send_temp_command();
+				timerWaitUs(12000);
+				next_state = STATE2_MEASURE;
+			}
 			break;
 
-		case 2 :
+		case STATE2_MEASURE:
+			next_state = STATE2_MEASURE;
+			if(event & (COMP1_MASK))
+			{
+				read_temperature();
+				next_state = STATE3_REPORT;
+
+			}
 			break;
 
-		default :
-			LOG_INFO("No actions to be performed in default case");
+		case STATE3_REPORT:
+			next_state = STATE3_REPORT;
+			if(event & I2C0_MASK_READ)
+			{
+				NVIC_DisableIRQ(I2C0_IRQn);
+				x = measure_temp();
+				LOG_INFO("Temperature is %fC", x);
+				GPIO_PinOutClear(gpioPortD, 15);
+
+				CMU_ClockEnable(cmuClock_I2C0, false);
+				next_state = STATE0_TIMER_WAIT;
+				SLEEP_SleepBlockEnd(sleepEM2);
+			}
+			break;
+
+		default:
+			LOG_INFO("Wrong state entered");
 			break;
 	}
 }

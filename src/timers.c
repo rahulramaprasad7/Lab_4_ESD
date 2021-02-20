@@ -15,17 +15,6 @@
 
 #include "timers.h"
 
-// DOS: copied from timers.h, see comment there
-#if (LOWEST_ENERGY_MODE < 3)
-	#define ACTUAL_CLK_FREQ 32768
-	#define PRESCALER_VALUE 4
-#else
-	#define ACTUAL_CLK_FREQ 1000
-	#define PRESCALER_VALUE 1
-#endif
-
-#define VALUE_TO_LOAD (LETIMER_PERIOD_MS*(ACTUAL_CLK_FREQ/PRESCALER_VALUE))/1000
-
 LETIMER_Init_TypeDef letimerInit = {
 		.enable = true,
 		.topValue = VALUE_TO_LOAD,
@@ -45,9 +34,6 @@ void initTimer()
 	LETIMER_Init(LETIMER0, &letimerInit);
 	LETIMER_IntEnable(LETIMER0, LETIMER_IF_UF);
     LETIMER_Enable(LETIMER0, true);
-    // DOS
-    uint32_t frequency = CMU_ClockFreqGet (cmuClock_LETIMER0);
-    LOG_INFO("LETIMER0 freq=%d", frequency);
 }
 
 inline void timerWaitUs(uint32_t us_wait)
@@ -63,30 +49,28 @@ inline void timerWaitUs(uint32_t us_wait)
 		LOG_INFO("Input to the wait function exceeds the maximum limit, resetting it to %d", VALUE_TO_LOAD);
 		us_wait = VALUE_TO_LOAD;
 	}
-	// DOS: The timer is a 16-bit unsigned value
-	//      I changed these to uint16_t :
-	uint16_t current_count = LETIMER_CounterGet(LETIMER0);
 
 	// this variable is how many timer count "ticks" to wait in order for
 	// us_wait time to go by
 	uint16_t toCount = (us_wait * (ACTUAL_CLK_FREQ/PRESCALER_VALUE)) / 1000000;
+	uint16_t current_count = LETIMER_CounterGet(LETIMER0);
 
-	uint16_t countToPoll = current_count - toCount; // if this wraps around it will be way positive
 
-	if (countToPoll > VALUE_TO_LOAD) {
-		// wrap-around case, make sure you understand this case and this math, these are
-		// unsigned values
-		countToPoll = VALUE_TO_LOAD - (0xFFFF - countToPoll);
-	} else {
-		// countToPoll is the value we poll for
-	}
+	if(current_count > toCount)
+		//Set the value to count in COMP1
+		LETIMER_CompareSet(LETIMER0, 1, (current_count - toCount));
+	else
+		//Set the value to count in COMP1
+		LETIMER_CompareSet(LETIMER0, 1, (VALUE_TO_LOAD - (toCount - current_count)));
 
-	// DOS: Bug: The timer CNT value and these variables are unsigned, it is
-	//      impossible for them to go negative.
-//	if(current_count - toCount < 0)
-//		countToPoll = (VALUE_TO_LOAD) - (toCount - current_count);
-//	else
-//		countToPoll = current_count - toCount;
-	while(LETIMER_CounterGet(LETIMER0) != countToPoll);
+	//Enable COMP1 interrupt
+	LETIMER_IntEnable(LETIMER0, LETIMER_IF_COMP1);
 }
 
+
+uint32_t letimerMilliseconds()
+{
+   uint16_t currentCounter = LETIMER_CounterGet(LETIMER0);
+   uint16_t us = (VALUE_TO_LOAD - currentCounter) * (1000000 / (ACTUAL_CLK_FREQ/PRESCALER_VALUE));
+   return((threeSecondCount * LETIMER_PERIOD_MS) + (us / 1000));
+}

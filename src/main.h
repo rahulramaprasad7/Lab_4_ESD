@@ -14,6 +14,21 @@
 #ifndef __myMAIN
 #define __myMAIN
 
+#define LOWEST_ENERGY_MODE 3
+#define LETIMER_PERIOD_MS 3000
+#define LED_ON_TIME_MS 1000
+
+#if (LOWEST_ENERGY_MODE < 3)
+	#define ACTUAL_CLK_FREQ 32768
+	#define PRESCALER_VALUE 4
+#else
+	#define ACTUAL_CLK_FREQ 1000
+	#define PRESCALER_VALUE 1
+#endif
+
+#define VALUE_TO_LOAD (LETIMER_PERIOD_MS*(ACTUAL_CLK_FREQ/PRESCALER_VALUE))/1000
+extern int threeSecondCount;
+
 
 #include "gecko_configuration.h"
 #include "native_gecko.h"
@@ -26,13 +41,8 @@
 #include "i2c.h"
 #include "scheduler.h"
 #include "em_core.h"
-
-extern int threeSecondCount;
-
-
-#define LOWEST_ENERGY_MODE 3
-#define LETIMER_PERIOD_MS 3000
-#define LED_ON_TIME_MS 1000
+#include <stdint.h>
+#include <stdlib.h>
 
 /*
  * @brief Run the main()
