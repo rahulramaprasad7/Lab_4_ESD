@@ -47,6 +47,7 @@ int appMain(gecko_configuration_t *config)
   //SLEEP_EnergyMode_t putToSleep = sleepEM3;
   //SLEEP_SleepBlockBegin(putToSleep);
   /* Infinite loop */
+  sensorPowerUp();
   while (1)
   {
 
@@ -55,7 +56,7 @@ int appMain(gecko_configuration_t *config)
 	  {
 		 //Sleep if no events are pending
 		 logFlush();
-		 SLEEP_Sleep();
+//		 SLEEP_Sleep();
 	  }
 
 	  //Get the next event to process

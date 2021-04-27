@@ -66,62 +66,47 @@ void i2c_state_machine(uint32_t event)
 	enum states current_state;
 	static enum states next_state = STATE0_TIMER_WAIT;
 	current_state = next_state;
-	float x;
+	//	float x;
 	switch(current_state)
 	{
-		case STATE0_TIMER_WAIT:
-			next_state = STATE0_TIMER_WAIT;
-			if(event & UF_MASK)
-			{
-				i2c_init();
-				//Enable sensor through GPIO
-				GPIO_PinModeSet(gpioPortD, 15, gpioModePushPull, false);
-				GPIO_PinOutSet(gpioPortD, 15);
-				timerWaitUs(80000);
-				next_state = STATE1_WARMUP;
-			}
-			break;
-
-		case STATE1_WARMUP:
+	case STATE0_TIMER_WAIT:
+		next_state = STATE0_TIMER_WAIT;
+		if(event & UF_MASK)
+		{
+			readCH1_LOW();
 			next_state = STATE1_WARMUP;
-			if(event & COMP1_MASK)
-			{
-				SLEEP_SleepBlockBegin(sleepEM2);
-				//Send the command to measure temperature
-				send_temp_command();
-				timerWaitUs(12000);
-				next_state = STATE2_MEASURE;
-			}
-			break;
+		}
+		break;
 
-		case STATE2_MEASURE:
+	case STATE1_WARMUP:
+		next_state = STATE1_WARMUP;
+		if(event & I2C0_MASK_READ)
+		{
+			readCH1_HIGH();
 			next_state = STATE2_MEASURE;
-			if(event & (COMP1_MASK))
-			{
-				read_temperature();
-				next_state = STATE3_REPORT;
+		}
+		break;
 
-			}
-			break;
-
-		case STATE3_REPORT:
+	case STATE2_MEASURE:
+		if(event & I2C0_MASK_READ)
+		{
+			readCH0_LOW();
 			next_state = STATE3_REPORT;
-			if(event & I2C0_MASK_READ)
-			{
-				NVIC_DisableIRQ(I2C0_IRQn);
-				x = measure_temp();
-				LOG_INFO("Temperature is %fC", x);
-				GPIO_PinOutClear(gpioPortD, 15);
+		}
+		break;
 
-				CMU_ClockEnable(cmuClock_I2C0, false);
-				next_state = STATE0_TIMER_WAIT;
-				SLEEP_SleepBlockEnd(sleepEM2);
-			}
-			break;
+	case STATE3_REPORT:
+		if(event & I2C0_MASK_READ)
+		{
+			readCH0_HIGH();
+			next_state = STATE0_TIMER_WAIT;
+		}
+		break;
 
-		default:
-			LOG_INFO("Wrong state entered");
-			break;
+	default:
+		LOG_INFO("Wrong state entered");
+		break;
+
 	}
 }
 

@@ -17,7 +17,7 @@
 #include "i2cspm.h"
 #include "main.h"
 
-#define device_address 0x40
+#define device_address 0x39
 
 #define MEASURE_TEMP_NO_HOLD_MASTER 0xF3
 
@@ -60,8 +60,13 @@ void read_temperature();
  *
  * @return float
  */
-float measure_temp();
+//float measure_temp();
 
+float calculateLUX(uint16_t ch0Read, uint16_t ch1Read);
 
-
+void sensorPowerUp();
+void readCH1_LOW();
+void readCH1_HIGH();
+void readCH0_LOW();
+void readCH0_HIGH();
 #endif /* SRC_I2C_H_ */
